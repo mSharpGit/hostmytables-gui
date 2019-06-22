@@ -4,7 +4,7 @@
 
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
-
+@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 /*!
  * Start Bootstrap - Business Casual v5.0.5 (https://startbootstrap.com/template-overviews/business-casual)
  * Copyright 2013-2019 Start Bootstrap
@@ -13,7 +13,7 @@
 
  body {
     font-family: 'Lora';
-    background:  url("./assets/bg.jpg");
+    /* background:  url("./assets/bg.jpg"); */
     background: -webkit-gradient(linear, left top, left bottom, from(rgba(47, 23, 15, 0.65))), url("./assets/bg.jpg");
     background: linear-gradient(rgba(47, 23, 15, 0.65)), url("./assets/bg.jpg");
     background-attachment: fixed;

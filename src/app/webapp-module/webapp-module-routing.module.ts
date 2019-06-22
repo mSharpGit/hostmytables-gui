@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { WebappComponent } from './webapp/webapp.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReserveComponent } from './reserve/reserve.component';
 
 const routes: Routes = [
-  { path: '', component: WebappComponent }
-
+  { path: '', component: DashboardComponent },
+  { path: 'dashboard',      component: DashboardComponent },
+  { path: 'reserve',      component: ReserveComponent },
 ];
 
 @NgModule({

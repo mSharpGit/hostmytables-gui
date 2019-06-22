@@ -1,0 +1,109 @@
+<h1 mat-dialog-title>Add Reservation</h1>
+<div mat-dialog-content>
+  <!-- <p>What's your favorite animal?</p> -->
+  <form #myForm="ngForm" [formGroup]="addReserveForm">
+<div class="form-group">
+  <div class="row">
+      <div class="col-md-5">
+        <mat-form-field class="example-full-width">
+            <input matInput formControlName="name" placeholder="Name">
+          </mat-form-field>
+      </div>
+      <div class="col-md-7">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="notes" placeholder="notes">
+          </mat-form-field>
+      </div>
+   </div>
+  <div class="row">
+      <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+            <mat-select formControlName="floor" placeholder="Floor"  name="Floor" (selectionChange)="getSections($event.value)">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let floor of floors" [value]="floor.id">
+                  {{floor.floor_name}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+      <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+            <mat-select formControlName="section" placeholder="Section"  name="Section" (selectionChange)="getTables($event.value)">
+                <mat-option>None</mat-option>
+                <mat-option *ngFor="let section of sections" [value]="section.id">
+                  {{section.section_name}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+      <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+              <mat-select formControlName="table" placeholder="Table" name="Table">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let table of tables" [value]="table.id">
+                    {{table.table_name}}
+                  </mat-option>
+                </mat-select>
+          </mat-form-field>
+      </div>
+      <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+              <input formControlName="date" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker" placeholder="Choose a date">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker touchUi #picker></mat-datepicker>
+          </mat-form-field>
+      </div>
+  </div>
+  <div class="row">
+      <div class="col-md-3">
+        <mat-form-field class="example-full-width">
+            <input matInput formControlName="duration" placeholder="Duration" type="number">
+          </mat-form-field>
+          <!-- <input mdc-datetime-picker="" date="false" time="true" type="text" id="time15"
+placeholder="Time" minutes="true" minute-steps="15" min-date="minDate" auto-ok="true"
+format="hh:mm a" short-time="true" ng-model="time" class=" md-input"> -->
+<!-- <mat-form-field>
+    <input matInput type="datetime-local" placeholder="start date">
+  </mat-form-field> -->
+  <!-- <md-time-picker ng-model="time.twentyfour" message="message" no-meridiem no-auto-switch></md-time-picker> -->
+  <!-- <input placeholder="Editable dial" aria-label="Editable dial"
+                [ngxTimepicker]="editableDial" readonly>
+            <ngx-material-timepicker #editableDial [enableKeyboardInput]="true"></ngx-material-timepicker> -->
+            <material-timepicker color="primary" label="Hour" [userTime]="exportTime" (change)="onChangeHour($event)" revertLabel="Remove" submitLabel="Ok"></material-timepicker>
+      </div>
+      <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+              <input matInput formControlName="guestsnumber" placeholder="Number Of Guests" type="number">
+          </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <mat-form-field class="example-full-width">
+            <input matInput formControlName="minimumspent" placeholder="Minimum Spent">
+          </mat-form-field>
+      </div>
+      <div class="col-md-3">
+          <mat-form-field class="example-full-width">
+              <mat-select formControlName="waiter" placeholder="Waiter" name="waiter">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let waiter of waiters" [value]="waiter.id">
+                    {{waiter.name}}
+                  </mat-option>
+                </mat-select>
+          </mat-form-field>
+      </div>
+  </div>
+  <!-- <mat-form-field><input matInput [(ngModel)]="data.name"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.notes"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.section"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.minimunSpent"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.waiter"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.date"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.duration"></mat-form-field> 
+  <mat-form-field><input matInput [(ngModel)]="data.guestsNumber"></mat-form-field>
+  <mat-form-field><input matInput [(ngModel)]="data.table"></mat-form-field> -->
+<div mat-dialog-actions class="float-right">
+  <button mat-button (click)="onNoClick()" class="btn btn-danger pull-right">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.name" (click)="addReservation(addReserveForm.value)" cdkFocusInitial class="btn btn-danger pull-right">Add</button>
+</div>
+</div>
+</form>

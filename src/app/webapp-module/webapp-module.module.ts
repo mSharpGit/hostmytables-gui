@@ -2,13 +2,46 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { WebappModuleRoutingModule } from './webapp-module-routing.module';
-import { WebappComponent } from './webapp/webapp.component';
+import { MaterialTimePickerModule } from '@candidosales/material-time-picker';
 
+import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
+import {
+  MatButtonModule,
+  MatInputModule,
+  MatIconModule,
+  MatRippleModule,
+  MatFormFieldModule,
+  MatTooltipModule,
+  MatSelectModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatSnackBarModule ,
+  MatDialogModule ,
+  MAT_DATE_FORMATS,
+  MAT_NATIVE_DATE_FORMATS,
+} from '@angular/material';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { ReserveComponent, AddReserveDialog } from './reserve/reserve.component';
 @NgModule({
-  declarations: [WebappComponent],
+  declarations: [DashboardComponent, ReserveComponent, AddReserveDialog],
+  entryComponents: [AddReserveDialog],
   imports: [
+    MaterialTimePickerModule,
     CommonModule,
-    WebappModuleRoutingModule
+    WebappModuleRoutingModule,
+    MatButtonModule,
+    MatInputModule,
+    MatRippleModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSnackBarModule,
+    MatDialogModule ,
+    ReactiveFormsModule,
+    FormsModule,
   ]
 })
 export class WebappModuleModule { }
