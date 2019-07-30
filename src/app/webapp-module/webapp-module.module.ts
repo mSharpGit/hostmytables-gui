@@ -21,10 +21,10 @@ import {
   MAT_NATIVE_DATE_FORMATS,
 } from '@angular/material';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ReserveComponent, AddReserveDialog } from './reserve/reserve.component';
+import { ReserveComponent } from './reserve/reserve.component';
 @NgModule({
-  declarations: [DashboardComponent, ReserveComponent, AddReserveDialog],
-  entryComponents: [AddReserveDialog],
+  declarations: [DashboardComponent, ReserveComponent],
+  entryComponents: [],
   imports: [
     MaterialTimePickerModule,
     CommonModule,

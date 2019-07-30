@@ -1,5 +1,6 @@
 export class Occupy {
-    id: number;
+	id: number;
+	restaurant_id: number;
     customer_id: number;
     table_id:        number;
 	type:    string;
@@ -9,10 +10,11 @@ export class Occupy {
 	guests_number:    number;
 	notes:       string;
 	duration:    string;
+	minimum_spent:    string;
 	waiter_id: number;
-    addDate:  string;
-    customer_name:  string;  
+    add_date:  string;
+ /*    customer_name:  string;  
 	customer_phone:  string;  
 	table_max_chairs:  number; 
-	table_number:  number;   
+	table_number:  number;   */ 
   }

@@ -1,0 +1,10 @@
+::ng-deep .coloring .mat-form-field-label{
+    color:rgb(255, 255, 255) !important;
+ }
+ 
+ ::ng-deep .coloring .mat-datepicker-toggle{
+    color:rgb(255, 255, 255)  !important;
+ }
+ ::ng-deep .coloring .mat-form-field-underline{
+ background: rgb(255, 255, 255)  !important;
+ }

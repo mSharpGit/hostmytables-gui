@@ -22,16 +22,15 @@ export class ReservationsService {
   constructor(private router: Router,
     private http: HttpClient,) { }
 
-  getReservations(id: number):Observable<Occupy[]>{
+  getReservations(id: number, date: string):Observable<Occupy[]>{
     
-    return this.http.get<Occupy[]>(this.apiUrl+"/"+id, httpOptions).pipe(
+    return this.http.get<Occupy[]>(this.apiUrl+"/id="+id+"&date='"+date+"'", httpOptions).pipe(
       tap(occupy => console.log('fetched reservations', occupy))
     ); 
   }
 
   addReservation(occupy: Occupy): Observable<Occupy> {
-    
-    return this.http.post<Occupy>(this.reservationUrl, occupy, httpOptions).pipe(
+     return this.http.post<Occupy>(this.reservationUrl, occupy, httpOptions).pipe(
       tap((occupy: Occupy) => {console.log('New reservation added', occupy)
     }));
   }

@@ -29,6 +29,7 @@ import { AuthGuard } from './services/auth.guard';
 import { JwtInterceptor } from './services/jwt.interceptor';
 import { ErrorHandler } from './services/error_handler';
 import { EventEmitterService } from './services/event-emitter.service';
+import { Globals } from './structures/globals';
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
@@ -61,7 +62,8 @@ import { EventEmitterService } from './services/event-emitter.service';
     NotificationsComponent,
     EventEmitterService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true, }
-    , {provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS}],
+    , {provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS},
+  Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

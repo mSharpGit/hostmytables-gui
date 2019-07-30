@@ -5,8 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Occupy } from '../structures/occupy';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
-import { Table } from '../structures/table';
-import { Floor } from '../structures/floor';
+import { Table, Tableid } from '../structures/table';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -17,13 +16,21 @@ const httpOptions = {
 export class TablesService {
 
   private url = environment.apiUrl;
-  private sectionTableUrl = this.url + '/table/section/';
+  private TableUrl = this.url + '/table';
+  private sectionTableUrl = this.url + '/table/section';
 
   constructor(private router: Router,
     private http: HttpClient,) { }
 
-  getTables(id: number): Observable<Table[]> {
-    const url = this.sectionTableUrl+"/"+id;
+    getTableBatch(ids): Observable<Table[]> {
+       const url = this.TableUrl+"/batch/("+ids.join(',')+")";
+      return this.http.get<Table[]>(url).pipe(
+        tap(table => console.log(`fetched tables`, table))
+      ); 
+    }
+  
+  getTables(restaurabt_id: number): Observable<Table[]> {
+    const url = this.sectionTableUrl+"/"+restaurabt_id;
     return this.http.get<Table[]>(url).pipe(
       tap(table => console.log(`fetched Floors restuarant`, table))
     );

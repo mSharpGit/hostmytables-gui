@@ -23,10 +23,10 @@ export class JwtInterceptor implements HttpInterceptor {
                 }
             });
         }
-        //console.log("request:", request)
+        console.log("request:", request)
         return next.handle(request).pipe(
             tap((event: HttpEvent<any>) => {}, (err: any) => {
-                console.log ('err:',err.error, ' err.status: ', err.status)
+                //console.log ('err:',err.error, ' err.status: ', err.status)
                 if (err.status == 401 ){
                     this.errorHandler.handleTextError('Session Expired Please Log In Again');
                     this.router.navigate(['/login']);
