@@ -17,9 +17,7 @@ export class CustomerService {
 
   private url = environment.apiUrl;
   private apiUrl = this.url + '/customers';
-  private restrictionUrl = this.url + '/foodrestrictions';
-  private allergyUrl = this.url + '/foodallergies';
-  private customerUrl = this.url + '/customers';
+  private customerUrl = this.url + '/customer';
 
   constructor(private router: Router,
     private http: HttpClient, ) { }
@@ -46,50 +44,25 @@ export class CustomerService {
       }));
   }
 
-  getRestrictions(): Observable<FoodRestrictions[]> {
-    return this.http.get<FoodRestrictions[]>(this.restrictionUrl, httpOptions).pipe(
-      tap(foodRestrictions => console.log('fetched food Restrictions', foodRestrictions))
-    );
-  }
-
-  addRestriction(foodRestriction: FoodRestrictions): Observable<FoodRestrictions> {
-    return this.http.post<FoodRestrictions>(this.restrictionUrl, foodRestriction, httpOptions).pipe(
-      tap((foodRestriction: FoodRestrictions) => {
-        console.log('New Restriction added', foodRestriction)
-      }));
-  }
-
-  addRestrictionLink(foodRestrictionLink: FoodRestrictionLink): Observable<FoodRestrictionLink> {
-    return this.http.post<FoodRestrictionLink>(this.restrictionUrl+'/link', foodRestrictionLink, httpOptions).pipe(
-      tap((foodRestrictionLink: FoodRestrictionLink) => {
-        console.log('New Restriction link added', foodRestrictionLink)
-      }));
-  }
-
-  getAllergies(): Observable<FoodAllergies[]> {
-    return this.http.get<FoodAllergies[]>(this.allergyUrl, httpOptions).pipe(
-      tap(foodAllergies => console.log('fetched Food Allergies', foodAllergies))
-    );
-  }
-
-  addAllergy(foodAllergies: FoodAllergies): Observable<FoodAllergies> {
-    return this.http.post<FoodAllergies>(this.allergyUrl, foodAllergies, httpOptions).pipe(
-      tap((foodAllergies: FoodAllergies) => {
-        console.log('New Allergy added', foodAllergies)
-      }));
-  }
-
-  addAllergyLink(foodAllergyLink: FoodAllergyLink): Observable<FoodAllergyLink> {
-    return this.http.post<FoodAllergyLink>(this.allergyUrl+'/link', foodAllergyLink, httpOptions).pipe(
-      tap((foodAllergyLink: FoodAllergyLink) => {
-        console.log('New Allergy link added', foodAllergyLink)
-      }));
-  }
-
   getCustomerBatch(ids): Observable<Customer[]> {
     const url = this.apiUrl+"/batch/("+ids.join(',')+")";
    return this.http.get<Customer[]>(url).pipe(
      tap(customers => console.log(`fetched customers`, customers))
    ); 
  }
+
+ 
+ editCustomer(customer: Customer): Observable<Customer> {
+  return this.http.put<Customer>(this.customerUrl+'/'+ customer.id, customer, httpOptions).pipe(
+   tap((customer: Customer) => {console.log('Customer updated', customer)
+ }));
+}
+
+ deleteCustomer (customer: Customer): Observable<Customer> {
+  const id = typeof customer === 'number' ? customer : customer.id;
+  const url = `${this.customerUrl}/${id}`;
+  return this.http.delete<Customer>(url, httpOptions).pipe(
+    tap(_ => console.log(`deleted customer id=${id}`))
+  );
+}
 }

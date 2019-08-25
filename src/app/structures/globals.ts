@@ -6,6 +6,8 @@ export class Globals {
     
     titles: Array<title> = [{id: 1, value: 'Mr.'},{id: 2, value: 'Ms.'},{id: 3, value: 'Dr.'},{id: 4, value: 'Prof.'},{id: 5, value: 'Other'}]; 
     codes: Array<code> = [
+        {countryCode: 'LB' , value: '+961', desc: 'Lebanon (+961)'},
+        {countryCode: 'US' , value: '+1', desc: 'USA (+1)'},
         {countryCode: 'DZ' , value: '+213', desc: 'Algeria (+213)'},
         {countryCode: 'AD' , value: '+376', desc: 'Andorra (+376)'},
         {countryCode: 'AO' , value: '+244', desc: 'Angola (+244)'},
@@ -110,7 +112,6 @@ export class Globals {
         {countryCode: 'KG' , value: '+996', desc: 'Kyrgyzstan (+996)'},
         {countryCode: 'LA' , value: '+856', desc: 'Laos (+856)'},
         {countryCode: 'LV' , value: '+371', desc: 'Latvia (+371)'},
-        {countryCode: 'LB' , value: '+961', desc: 'Lebanon (+961)'},
         {countryCode: 'LS' , value: '+266', desc: 'Lesotho (+266)'},
         {countryCode: 'LR' , value: '+231', desc: 'Liberia (+231)'},
         {countryCode: 'LY' , value: '+218', desc: 'Libya (+218)'},
@@ -207,7 +208,6 @@ export class Globals {
         {countryCode: 'UA' , value: '+380', desc: 'Ukraine (+380)'},
         {countryCode: 'AE' , value: '+971', desc: 'United Arab Emirates (+971)'},
         {countryCode: 'UY' , value: '+598', desc: 'Uruguay (+598)'},
-        {countryCode: 'US' , value: '+1', desc: 'USA (+1)'},
         {countryCode: 'UZ' , value: '+7', desc: 'Uzbekistan (+7)'},
         {countryCode: 'VU' , value: '+678', desc: 'Vanuatu (+678)'},
         {countryCode: 'VA' , value: '+379', desc: 'Vatican City (+379)'},

@@ -11,15 +11,23 @@ import { Floor } from '../structures/floor';
 export class FloorsService {
 
   private url = environment.apiUrl;
+  private FloorUrl = this.url + '/floor';
   private restuarantFloorUrl = this.url + '/floor/restaurant/';
 
   constructor(private router: Router,
     private http: HttpClient,) { }
 
+    getFloor(id: number): Observable<Floor> {
+      const url = this.FloorUrl+"/"+id;
+      return this.http.get<Floor>(url).pipe(
+        tap(floor => console.log(`fetched Floor`, floor))
+      );
+    }
+
   getFloors(id: number): Observable<Floor[]> {
     const url = this.restuarantFloorUrl+"/"+id;
     return this.http.get<Floor[]>(url).pipe(
-      tap(floor => console.log(`fetched Floors restuarant`, floor))
+      tap(floor => console.log(`fetched restuarant's Floors`, floor))
     );
   }
 }

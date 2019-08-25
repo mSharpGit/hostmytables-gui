@@ -22,6 +22,13 @@ export class TablesService {
   constructor(private router: Router,
     private http: HttpClient,) { }
 
+    getTable(id): Observable<Table> {
+      const url = this.TableUrl+"/" + id;
+     return this.http.get<Table>(url).pipe(
+       tap(table => console.log(`fetched table`, table))
+     ); 
+   }
+
     getTableBatch(ids): Observable<Table[]> {
        const url = this.TableUrl+"/batch/("+ids.join(',')+")";
       return this.http.get<Table[]>(url).pipe(
@@ -29,10 +36,10 @@ export class TablesService {
       ); 
     }
   
-  getTables(restaurabt_id: number): Observable<Table[]> {
-    const url = this.sectionTableUrl+"/"+restaurabt_id;
+  getTables(restaurant_id: number): Observable<Table[]> {
+    const url = this.sectionTableUrl+"/"+restaurant_id;
     return this.http.get<Table[]>(url).pipe(
-      tap(table => console.log(`fetched Floors restuarant`, table))
+      tap(table => console.log(`fetched Tables restuarant`, table))
     );
   }
 }

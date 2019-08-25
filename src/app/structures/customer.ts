@@ -5,6 +5,7 @@ export class Customer {
 	name: string;
 	lastname: string;
 	email: string;
+	country_code: string;
 	phone: string;
 	birth_date: string;
 	company: string;
@@ -12,7 +13,7 @@ export class Customer {
 	status: string;
 	sex: string;
 	notes: string;
-	addDate: string;
+	add_date: string;
 
 	constructor(){
 		this.id = 0;
@@ -21,6 +22,7 @@ export class Customer {
 		this.name = "";
 		this.lastname = "";
 		this.email ="";
+		this.country_code = "";
 		this.phone = "";
 		this.birth_date = "";
 		this.company = "";
@@ -28,19 +30,30 @@ export class Customer {
 		this.status = "";
 		this.sex = "";
 		this.notes = "";
-		this.addDate = "";
+		this.add_date = "";
 	}
 }
 
 export class FoodRestrictions {
 	id: number;
 	food_type: string;
+
+	constructor(){
+		this.id = 0;
+		this.food_type = "";
+	}
 }
 
 export class FoodRestrictionLink {
 	id: number;
 	customer_id: number;
 	restriction_id: number;
+
+	constructor(){
+		this.id = 0;
+		this.customer_id = 0;
+		this.restriction_id = 0;
+	}
 }
 
 export class FoodAllergies {

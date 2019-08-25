@@ -41,8 +41,11 @@ export class AddReservationComponent implements OnInit {
   addReserveForm: FormGroup;
   submitted = false;
   sections: Section[];
+  sectionv: Section;
   floors: Floor[];
+  floorv: Floor;
   tables: Table[];
+  filteredTable: Table;
   waiters: User[];
   occupy: Occupy[] = [];
   customer: Customer[] = [];
@@ -63,7 +66,7 @@ export class AddReservationComponent implements OnInit {
   selectedfloorValue: Number;
   selectedtableValue: Number;
   selectedwaiterValue: Number;
-  private exportTime = { hour: 7, minute: 15, meriden: 'PM', format: 24 };
+  private exportTime = { hour: 5, minute: 0, meriden: 'PM', format: 12 };
   pickedTime: string;
   constructor(
     public dialog: MatDialog,
@@ -82,23 +85,39 @@ export class AddReservationComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.data.type == 'ADD') {
-    this.ADD = true;
-      this.odate = new FormControl(moment(this.data.date).format('YYYY-MM-DD'));
+    if (this.data.type == 'EDIT') {
+       //this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
+       this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
+       this.selectedCustomer = this.data.customer;
+      /*  this.sectionsService.getSection(this.data.table.section_id)
+       .subscribe(section => {this.sectionv = section
+         
+         this.floorsService.getFloor(section.floor_id)
+         .subscribe(floor => {this.floorv = floor;
+           this.sectionSet = true;
+           this.floorSet = true;
+           this.tableSet = true;});
+         
+       }); */
     } else {
-      //this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
-      this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
-      this.selectedCustomer = this.data.customer;
+     
+    this.ADD = true;
+    this.odate = new FormControl(moment(this.data.date).format('YYYY-MM-DD'));
     }
+    this.createForm();
     this.titles = this.globals.titles;
     this.codes = this.globals.codes;
     this.getFloors(this.authenticationService.getRestuarantID());
     this.getWaiters(this.authenticationService.getRestuarantID());
-    this.createForm();
-    this.addReserveForm.controls['date'].setValue(this.odate);
-    this.pickedTime = this.exportTime.hour + ':' + this.exportTime.minute;
+   
+    //console.log(this.odate.value, ':',new Date());
+    this.addReserveForm.controls['date'].setValue(this.odate.value);
     
-
+    this.pickedTime = String(this.exportTime.hour).padStart(2, '0') + ':' + String(this.exportTime.minute).padStart(2, '0')  + ' ' + this.exportTime.meriden;
+    //console.log('time',this.pickedTime)
+    this.addReserveForm.controls['time'].setValue(this.pickedTime)
+    if (this.floorv) {this.addReserveForm.controls['floor'].setValue(this.floorv.id)}
+    if (this.sectionv) {this.addReserveForm.controls['section'].setValue(this.sectionv.id)}
 
     //this.addReserveForm.controls['time'].setValue(this.pickedTime)
     // this.addReserveForm.controls['date'].setValue(this.odate.value)
@@ -141,19 +160,27 @@ export class AddReservationComponent implements OnInit {
       .subscribe(floors => this.floors = floors);
   }
   getSections(id: number) {
+    if(id){
     this.sectionsService.getSections(id)
-      .subscribe(sections => this.sections = sections);
-    this.floorSet = true;
+      .subscribe(sections => {this.sections = sections
+        this.floorSet = true;});
+      } 
   }
   getTables(id: number) {
+    if(id){
     this.tablesService.getTables(id)
-      .subscribe(tables => this.tables = tables);
-    this.sectionSet = true;
+      .subscribe(tables => {this.tables = tables
+        this.sectionSet = true;});
+      }
   }
 
   setGuests(id: number) {
+    if(id){
     this.tableSet = true;
-    this.guestsNum = this.tables[id].max_chairs
+    this.filteredTable = this.tables.filter(x => x.id === id)[0];
+    this.guestsNum = this.filteredTable.max_chairs
+    
+    }
   }
 
   getWaiters(id: number) {
@@ -162,13 +189,15 @@ export class AddReservationComponent implements OnInit {
   }
 
   openAddGDialog(): void {
+    var dialogCustomer = new Customer();
+    dialogCustomer.name = this.addReserveForm.controls.name.value;
+    dialogCustomer.lastname = this.addReserveForm.controls.lastname.value;
+    dialogCustomer.phone = this.addReserveForm.controls.phone.value;
     const dialogRef = this.dialog.open(AddGuestComponent, {
       width: '850px',
-      data: { //title: this.addReserveForm.controls.title.value,
-        name: this.addReserveForm.controls.name.value,
-        lastname: this.addReserveForm.controls.lastname.value,
-        code: this.addReserveForm.controls.code.value,
-        phone: this.addReserveForm.controls.phone.value
+      data: { 
+        customer: dialogCustomer,
+        type: 'ADD'
       }
     });
 
@@ -196,7 +225,7 @@ export class AddReservationComponent implements OnInit {
       return;
     }
 
-    const id = 0;
+    const id = this.data.occupy.id;
     var restaurant_id = this.authenticationService.getRestuarantID();
     var customer_id = 0
     if (this.selectedCustomer != null) {
@@ -210,7 +239,8 @@ export class AddReservationComponent implements OnInit {
     const type = 'reservation';
     const occupation_date = moment(value.date).format('YYYY-MM-DD')//setValue(value.date).setNumberFormat('MM/dd/yyyy');
     const time = value.time;
-    const status = '0';
+    var status = 1
+    if(this.data.type === 'RESERVE'){ status = 0;}
 
     const guests_number = value.guestsNumber;
     /* var guests_number = 0
@@ -236,7 +266,7 @@ export class AddReservationComponent implements OnInit {
 
     const occupy: Occupy = { id, restaurant_id, customer_id, table_id, type, occupation_date, time, status, guests_number, notes, duration, minimum_spent, waiter_id, add_date };
     if (!occupy) { return; }
-    this.reservationsService.addReservation(occupy)
+    this.reservationsService.editReservation(occupy)
       .subscribe(occupy => {
         this.occupy.push(occupy);
         this.onCloseAddReserve.emit(this.occupy);
@@ -266,10 +296,11 @@ export class AddReservationComponent implements OnInit {
     if (this.tables != null) {
        table_id = this.tables[value.table].id;
       } else {table_id = 0} */
-    const type = 'reservation';
+    const type = this.data.type;
     const occupation_date = moment(value.date).format('YYYY-MM-DD')//setValue(value.date).setNumberFormat('MM/dd/yyyy');
     const time = value.time;
-    const status = '0';
+    var status = 1
+    if(this.data.type === 'RESERVE'){ status = 0;}
     const guests_number = value.guestsNumber;
     /* var guests_number = 0;
     if (value.guestsNumber != null) {
@@ -333,16 +364,16 @@ export class AddReservationComponent implements OnInit {
         lastname: new FormControl(this.data.customer.lastname, [Validators.required]),
         code: new FormControl(""),
         phone: new FormControl(this.data.customer.phone, [Validators.required]),
-        notes: new FormControl(""),
-        floor: new FormControl(0),
-        section: new FormControl(0),
-        table: new FormControl(null),
+        notes: new FormControl(this.data.occupy.notes),
+        floor: new FormControl(),
+        section: new FormControl(),
+        table: new FormControl(this.data.table.table_name),
         date: new FormControl(this.odate),
-        time: new FormControl(""),
-        duration: new FormControl(""),
-        guestsNumber: new FormControl(0),
-        minimumSpent: new FormControl(""),
-        waiter: new FormControl(0)
+        time: new FormControl(this.data.occupy.time),
+        duration: new FormControl(this.data.occupy.duration),
+        guestsNumber: new FormControl(this.data.occupy.guests_number),
+        minimumSpent: new FormControl(this.data.occupy.minimum_spent),
+        waiter: new FormControl(this.data.occupy.waiter_id)
       });
     }
   }
@@ -364,10 +395,12 @@ export class AddReservationComponent implements OnInit {
 
 
   onChangeHour(event) {
-    //console.log('event', event.hour);
-    this.pickedTime = event.hour + ':' + event.minute;
+    console.log('event', event.hour);
+    this.pickedTime = String(event.hour).padStart(2, '0') + ':' + String(event.minute).padStart(2, '0') + ' ' + event.meriden;
+    
+     this.exportTime = { hour: event.hour, minute: event.minute, meriden: event.meriden, format: 12 };
     this.addReserveForm.controls['time'].setValue(this.pickedTime)
-    // console.log('event3', this.addReserveForm.get('time'));
+    //console.log('event3', this.addReserveForm.get('time'));
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {

@@ -35,6 +35,11 @@ export class ReservationsService {
     }));
   }
 
+  editReservation(occupy: Occupy): Observable<Occupy> {
+    return this.http.put<Occupy>(this.reservationUrl+'/'+ occupy.id, occupy, httpOptions).pipe(
+     tap((occupy: Occupy) => {console.log('Reservation updated', occupy)
+   }));
+ }
 
   deleteReservation (occupy: Occupy): Observable<Occupy> {
     const id = typeof occupy === 'number' ? occupy : occupy.id;
@@ -43,5 +48,14 @@ export class ReservationsService {
       tap(_ => console.log(`deleted reservation id=${id}`))
     );
   }
+
+  updateReservation (occupy: Occupy): Observable<Occupy> {
+    const id = typeof occupy === 'number' ? occupy : occupy.id;
+    const url = `${this.reservationUrl}/${id}`;
+    return this.http.put<Occupy>(url, occupy, httpOptions).pipe(
+      tap(_ => console.log(`reservation id=${id} status changed`))
+    );
+  }
+
 
 }

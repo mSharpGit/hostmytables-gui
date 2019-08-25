@@ -1,0 +1,553 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-plain">
+          <div class="card-header card-header-danger">
+            <div class="row">
+              <div class="col-md-6">
+                <h4 class="card-title mt-0">{{type}} Customers</h4>
+              </div>
+              <div class="col-md-6">
+                <!-- <div class="float-right">
+                  <button mat-raised-button type="submit" (click)="openGuestDialog('ADD')"
+                    class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Add a customer">
+                    <i class="material-icons">add</i>
+                    <div class="ripple-container"></div>
+                  </button>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+
+           
+              <form #myForm="ngForm" *ngIf="ADD && addGuestForm" [formGroup]="addGuestForm">
+                <div class="form-group">
+                  <!--First row-->
+                  <div class="row">
+                    <div class="col-md-2">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="title" [(value)]="selected" placeholder="Title"
+                          name="title">
+                          <mat-option *ngFor="let title of titles" [value]="title.id">
+                            {{title.value}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="name" value="{{customer.name}}" autocomplete="off"
+                          placeholder="Name">
+                      </mat-form-field>
+                      
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="lastname" value="{{customer.lastname}}" autocomplete="off"
+                          placeholder="last name">
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                  <!--Second row-->
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="code" placeholder="Country Code" name="code">
+                          <mat-option *ngFor="let code of codes" [value]="code.value">
+                            {{code.desc}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-8">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="phone" minlength="8" value="{{customer.phone}}"
+                          autocomplete="off" placeholder="Phone">
+                      </mat-form-field>
+                     
+                    </div>
+
+
+                  </div>
+
+                  <!--Second row-->
+                  <div class="row">
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="email" value="{{customer.email}}" autocomplete="off"
+                          placeholder="Email">
+                      </mat-form-field>
+                     
+                    </div>
+                    <div class="col-md-3">
+
+                      <mat-radio-group formControlName="sex" aria-label="Select a Gender">
+                        <mat-radio-button value="Male">Male</mat-radio-button>
+                        <mat-radio-button value="Female">Female</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input formControlName="birthdate" matInput [matDatepickerFilter]="dateFilter"
+                          [matDatepicker]="picker" placeholder="Choose a Birth Date"
+                          value="{{customer.birth_date}}">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker></mat-datepicker>
+                      </mat-form-field>
+                      
+                    </div>
+                  </div>
+                  <!--fifth row-->
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="jobtitle" value="{{customer.job_title}}"
+                          autocomplete="off" placeholder="Add a Job Title">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="company" value="{{customer.company}}" autocomplete="off"
+                          placeholder="Add a Company">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+
+                      <mat-radio-group formControlName="status" aria-label="Select a Marital Status">
+                        <mat-radio-button value="Married">Married</mat-radio-button>
+                        <mat-radio-button value="Single">Single</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+
+                  </div>
+                    <!--fifth row-->
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="card card-plain">
+                        <div class="card-header card-header-success">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4 class="card-title mt-2">Restrictions</h4>
+                                  </div>  
+                                    <div class="col-md-6 coloring">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-select formControlName="restriction" placeholder="Food Restriction">
+                                          <mat-option>None</mat-option>
+                                          <mat-option *ngFor="let restriction of foodRestrictions" [value]="restriction.id">
+                                            {{restriction.food_type}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="float-right">
+                                        <button mat-raised-button type="button" (click)="addCustRestriction('Add')"
+                                            class="btn btn-white btn-xs btn-round btn-just-icon m-0"
+                                            matTooltip="Add a restriction">
+                                            <i class="material-icons">add</i>
+                                            <div class="ripple-container"></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" >
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr *ngFor="let restrict of custRestrictions">
+                                            <td>
+                                                {{restrict.food_type}}
+                                            </td>
+                                            <td><button mat-raised-button type="submit" (click)="deleteCustRestriction(restrict)"
+                                                    class="btn btn-white btn-round btn-just-icon m-1 float-right"
+                                                    matTooltip="Delete restriction">
+                                                    <i class="material-icons">delete</i>
+                                                    <div class="ripple-container"></div>
+                                                </button>
+                                            </td>
+                                        </tr>
+    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-plain">
+                            <div class="card-header card-header-success">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h4 class="card-title mt-2">Allergies</h4>
+                                      </div>  
+                                        <div class="col-md-6 coloring">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-select formControlName="allergy" placeholder="Food Allergies">
+                                              <mat-option>None</mat-option>
+                                              <mat-option *ngFor="let allergy of foodAllergies" [value]="allergy.id">
+                                                {{allergy.food_type}}
+                                              </mat-option>
+                                            </mat-select>
+                                          </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="float-right">
+                                            <button mat-raised-button type="button" (click)="addCustAllergy('Add')"
+                                                class="btn btn-white btn-xs btn-round btn-just-icon m-0"
+                                                matTooltip="Add a allergy">
+                                                <i class="material-icons">add</i>
+                                                <div class="ripple-container"></div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" >
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr *ngFor="let allergy of custAllergies">
+                                                <td>
+                                                    {{allergy.food_type}}
+                                                </td>
+                                                <td><button mat-raised-button type="submit" (click)="deleteCustAllergy(allergy)"
+                                                        class="btn btn-white btn-round btn-just-icon m-1 float-right"
+                                                        matTooltip="Delete allergy">
+                                                        <i class="material-icons">delete</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                </td>
+                                            </tr>
+        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                  </div>
+                  <!--fourth row-->
+                <!--   <div class="row">
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="srestriction" placeholder="Food Restriction" name="srestriction">
+                          <mat-option>None</mat-option>
+                          <mat-option *ngFor="let restriction of foodRestrictions" [value]="restriction.id">
+                            {{restriction.food_type}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="restrictions" #restrictions autocomplete="off"
+                          placeholder="Add a new food restrictions">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-1">
+                      <button mat-raised-button type="button" [disabled]="restrictions.value ==''"
+                        (click)="addRestriction()" class="btn btn-danger btn-round btn-just-icon m-1"
+                        matTooltip="Add a restriction">
+                        <i class="material-icons">add</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </div>
+                  </div> -->
+                  <!--fifth row-->
+                  <!-- <div class="row">
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="sallergy" placeholder="Food Allergies" name="sallergy">
+                          <mat-option>None</mat-option>
+                          <mat-option *ngFor="let allergy of foodAllergies" [value]="allergy.id">
+                            {{allergy.food_type}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="allergy" #allergy autocomplete="off"
+                          placeholder="Add a new food allergy">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-1">
+                      <button mat-raised-button type="button" [disabled]="allergy.value === ''" (click)="addAllergy()"
+                        class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add an allergy">
+                        <i class="material-icons">add</i>
+                        <div class="ripple-container"></div>
+                      </button>
+                    </div>
+                  </div> -->
+
+                  <!--sixth row-->
+                  <div class="row">
+
+                    <div class="col-md-12">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="notes" value="{{customer.notes}}" autocomplete="off"
+                          placeholder="Add a Note">
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+                  <div mat-dialog-actions class="float-right">
+                    <button mat-button (click)="cancel()" class="btn btn-danger pull-right">Cancel</button>
+                    <button mat-button (click)="addGuest(addGuestForm.value)" cdkFocusInitial
+                      class="btn btn-danger pull-right">{{type}}</button>
+                  </div>
+                </div>
+              </form>
+            
+
+              <form #myForm="ngForm" *ngIf="!ADD && addGuestForm" [formGroup]="addGuestForm">
+                <div class="form-group">
+                  <!--First row-->
+                  <div class="row">
+                    <div class="col-md-2">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="title" placeholder="Title">
+                          <mat-option *ngFor="let title of titles" [value]="title.id">
+                            {{title.value}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="name" value="{{customer.name}}" autocomplete="off"
+                          placeholder="Name">
+                      </mat-form-field>
+                      
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="lastname" value="{{customer.lastname}}" autocomplete="off"
+                          placeholder="last name">
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+                  <!--Second row-->
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="code" placeholder="Country Code" name="code">
+                          <mat-option *ngFor="let code of codes" [value]="code.value">
+                            {{code.desc}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-8">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="phone" minlength="8" value="{{customer.phone}}"
+                          autocomplete="off" placeholder="Phone">
+                      </mat-form-field>
+                      
+                    </div>
+
+
+                  </div>
+
+                  <!--third row-->
+                  <div class="row">
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="email" value="{{customer.email}}" autocomplete="off"
+                          placeholder="Email">
+                      </mat-form-field>
+                      
+                    </div>
+                    <div class="col-md-3">
+
+                      <mat-radio-group formControlName="sex" aria-label="Select a Gender">
+                        <mat-radio-button value="Male">Male</mat-radio-button>
+                        <mat-radio-button value="Female">Female</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input formControlName="birthdate" matInput [matDatepickerFilter]="dateFilter"
+                          [matDatepicker]="picker" placeholder="Choose a Birth Date"
+                          value="{{customer.birth_date}}">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker></mat-datepicker>
+                      </mat-form-field>
+                     
+                    </div>
+                  </div>
+                  <!--fourth row-->
+                  <div class="row">
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="jobtitle" value="{{customer.job_title}}"
+                          autocomplete="off" placeholder="Add a Job Title">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="company" value="{{customer.company}}" autocomplete="off"
+                          placeholder="Add a Company">
+                      </mat-form-field>
+                    </div>
+
+                    <div class="col-md-4">
+
+                      <mat-radio-group formControlName="status" aria-label="Select a Marital Status">
+                        <mat-radio-button value="Married">Married</mat-radio-button>
+                        <mat-radio-button value="Single">Single</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+
+                  </div>
+                  <!--fifth row-->
+                  <div class="row">
+                    <div class="col-md-6">
+                    <div class="card card-plain">
+                        <div class="card-header card-header-success">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h4 class="card-title mt-2">Restrictions</h4>
+                                  </div>  
+                                    <div class="col-md-6 coloring">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-select formControlName="restriction" placeholder="Food Restriction">
+                                          <mat-option>None</mat-option>
+                                          <mat-option *ngFor="let restriction of foodRestrictions" [value]="restriction.id">
+                                            {{restriction.food_type}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="float-right">
+                                        <button mat-raised-button type="button" (click)="addCustRestriction('Add')"
+                                            class="btn btn-white btn-xs btn-round btn-just-icon m-0"
+                                            matTooltip="Add a restriction">
+                                            <i class="material-icons">add</i>
+                                            <div class="ripple-container"></div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body" >
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <tbody>
+                                        <tr *ngFor="let restrict of custRestrictions">
+                                            <td>
+                                                {{restrict.food_type}}
+                                            </td>
+                                            <td><button mat-raised-button type="submit" (click)="deleteCustRestriction(restrict)"
+                                                    class="btn btn-white btn-round btn-just-icon m-1 float-right"
+                                                    matTooltip="Delete restriction">
+                                                    <i class="material-icons">delete</i>
+                                                    <div class="ripple-container"></div>
+                                                </button>
+                                            </td>
+                                        </tr>
+    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-plain">
+                            <div class="card-header card-header-success">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h4 class="card-title mt-2">Allergies</h4>
+                                      </div>  
+                                        <div class="col-md-6 coloring">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-select formControlName="allergy" placeholder="Food Allergies">
+                                              <mat-option>None</mat-option>
+                                              <mat-option *ngFor="let allergy of foodAllergies" [value]="allergy.id">
+                                                {{allergy.food_type}}
+                                              </mat-option>
+                                            </mat-select>
+                                          </mat-form-field>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="float-right">
+                                            <button mat-raised-button type="button" (click)="addCustAllergy('Add')"
+                                                class="btn btn-white btn-xs btn-round btn-just-icon m-0"
+                                                matTooltip="Add a allergy">
+                                                <i class="material-icons">add</i>
+                                                <div class="ripple-container"></div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" >
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr *ngFor="let allergy of custAllergies">
+                                                <td>
+                                                    {{allergy.food_type}}
+                                                </td>
+                                                <td><button mat-raised-button type="submit" (click)="deleteCustAllergy(allergy)"
+                                                        class="btn btn-white btn-round btn-just-icon m-1 float-right"
+                                                        matTooltip="Delete allergy">
+                                                        <i class="material-icons">delete</i>
+                                                        <div class="ripple-container"></div>
+                                                    </button>
+                                                </td>
+                                            </tr>
+        
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                  </div>
+
+                  <!--sixth row-->
+                  <div class="row">
+
+                    <div class="col-md-12">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="notes" value="{{customer.notes}}" autocomplete="off"
+                          placeholder="Add a Note">
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+                  <div mat-dialog-actions class="float-right">
+                    <button mat-button (click)="cancel()" class="btn btn-danger pull-right">Cancel</button>
+                    <button mat-button (click)="editGuest(addGuestForm.value)" cdkFocusInitial
+                      class="btn btn-danger pull-right">{{type}}</button>
+                  </div>
+                </div>
+              </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

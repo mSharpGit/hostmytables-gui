@@ -1,0 +1,21 @@
+/** No CSS for this example */
+::ng-deep .coloring .mat-form-field-label{
+    color:rgb(255, 255, 255) !important;
+ }
+
+::ng-deep .coloring .mat-select-arrow{
+    color:rgb(255, 255, 255) !important;
+}
+
+ ::ng-deep .coloring .mat-select-value{
+    color:rgb(255, 255, 255) !important;
+}
+
+::ng-deep .coloring .mat-select-toggle{
+    color: rgb(255, 255, 255) !important;
+}
+
+::ng-deep .coloring .mat-form-field-underline{
+    background: rgb(255, 255, 255) !important;
+}
+

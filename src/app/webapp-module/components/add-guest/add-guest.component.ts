@@ -1,11 +1,13 @@
 import { Component, Inject, EventEmitter } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DialogData, title, code } from 'src/app/structures/interfaces';
+import { DialogData, title, code, AddGuestDialogData } from 'src/app/structures/interfaces';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Globals } from 'src/app/structures/globals';
 import { CustomerService } from 'src/app/services/customer.service';
 import { FoodRestrictions, FoodAllergies, Customer, FoodRestrictionLink, FoodAllergyLink } from 'src/app/structures/customer';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { RestrictionsService } from 'src/app/services/restrictions.service';
+import { AllergiesService } from 'src/app/services/allergies.service';
 
 
 @Component({
@@ -28,6 +30,7 @@ export class AddGuestComponent {
   foodRestrictionLink: FoodRestrictionLink;
   foodAllergyLink: FoodAllergyLink;
   onClose = new EventEmitter();
+  ADD = false;
 
   dateFilter = (d: Date): boolean => {
     // console.log('date:',d, d.getDay(), new Date().getDate())
@@ -38,23 +41,33 @@ export class AddGuestComponent {
 
   constructor(private globals: Globals,
     public dialogRef: MatDialogRef<AddGuestComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: AddGuestDialogData,
     private fb: FormBuilder,
     private customerService: CustomerService,
+    private restrictionService: RestrictionsService,
+    private allergyService: AllergiesService,
     private authenticationService: AuthenticationService
   ) {
 
   }
 
   ngOnInit() {
+    if (this.data.type == 'EDIT') {
+    } else {
+      this.ADD = true;
+    }
+
     this.createForm();
     this.titles = this.globals.titles;
     this.codes = this.globals.codes;
     this.getFoodAllergies();
     this.getFoodRestrictions();
-    console.log('data:' , this.data);
-   // this.addGuestForm.controls.name.setValue = this.data.name
+    console.log('data:', this.data);
+    // this.addGuestForm.controls.name.setValue = this.data.name
   }
+
+  //edit guest
+  editGuest(value) { }
 
   //add a new guest
   addGuest(value) {
@@ -72,22 +85,23 @@ export class AddGuestComponent {
     const name = value.name;
     const lastname = value.lastname;
     const email = value.email;
-    const phone = value.code + value.phone;
+    const country_code = value.code;
+    const phone = value.phone;
     const birth_date = value.birthdate;
     const company = value.company;
     const job_title = value.jobtitle;
     const status = value.status;
     const sex = value.sex;
     const notes = value.notes;
-    const addDate = '';
+    const add_date = '';
 
 
-    const customer: Customer = { id, restaurant_id, title, name, lastname, email, phone, birth_date, company, job_title, status, sex, notes, addDate };
+    const customer: Customer = { id, restaurant_id, title, name, lastname, email, country_code, phone, birth_date, company, job_title, status, sex, notes, add_date };
     if (!customer) { return; }
     this.customerService.addCustomer(customer)
       .subscribe(customer => {
         this.customer = customer;
-        this.data.id = this.customer.id;
+        this.data.customer.id = this.customer.id;
         this.addFoodRestrictionLink(value.srestriction);
         this.addFoodAllergyLink(value.sallergy);
         this.onClose.emit(customer);
@@ -98,7 +112,7 @@ export class AddGuestComponent {
         })
 
 
-    
+
   }
 
   //add restriction link to the customer
@@ -109,13 +123,13 @@ export class AddGuestComponent {
       const restriction_id = value;
       const foodRestrictionLink: FoodRestrictionLink = { id, customer_id, restriction_id }
       if (!foodRestrictionLink) { return; }
-      this.customerService.addRestrictionLink(foodRestrictionLink)
+      /* this.restrictionService.addRestrictionLink(foodRestrictionLink)
         .subscribe(foodRestrictionLink => {
           this.foodRestrictionLink = foodRestrictionLink;
         },
           error => {
             console.log("error", error)
-          })
+          }) */
     }
   }
   //add link of allergy to the customer
@@ -126,18 +140,18 @@ export class AddGuestComponent {
       const allergy_id = value;
       const foodAllergyLink: FoodAllergyLink = { id, customer_id, allergy_id }
       if (!foodAllergyLink) { return; }
-      this.customerService.addAllergyLink(foodAllergyLink)
+      /* this.allergyService.addAllergyLink(foodAllergyLink)
         .subscribe(foodAllergyLink => {
           this.foodAllergyLink = foodAllergyLink;
         },
           error => {
             console.log("error", error)
-          })
+          }) */
     }
   }
   //get Food Restrictions
   getFoodRestrictions() {
-    this.customerService.getRestrictions()
+    this.restrictionService.getRestrictions()
       .subscribe(foodRestrictions => this.foodRestrictions = foodRestrictions);
   }
   //add food restriction
@@ -148,7 +162,7 @@ export class AddGuestComponent {
     const food_type = control.value;
     const foodRestrictions: FoodRestrictions = { id, food_type };
     if (!foodRestrictions) { return; }
-    this.customerService.addRestriction(foodRestrictions)
+    this.restrictionService.addRestriction(foodRestrictions)
       .subscribe(foodRestrictions => {
         this.foodRestrictions.push(foodRestrictions);
       },
@@ -160,7 +174,7 @@ export class AddGuestComponent {
 
   //get Food Allergies
   getFoodAllergies() {
-    this.customerService.getAllergies()
+    this.allergyService.getAllergies()
       .subscribe(foodAllergies => this.foodAllergies = foodAllergies);
   }
 
@@ -172,7 +186,7 @@ export class AddGuestComponent {
     const food_type = control.value;
     const foodAllergy: FoodAllergies = { id, food_type };
     if (!foodAllergy) { return; }
-    this.customerService.addAllergy(foodAllergy)
+    this.allergyService.addAllergy(foodAllergy)
       .subscribe(foodAllergy => {
         this.foodAllergies.push(foodAllergy);
       },
@@ -182,7 +196,7 @@ export class AddGuestComponent {
   }
 
   onNoClick(): void {
-    
+
     this.dialogRef.close();
   }
 
@@ -191,10 +205,10 @@ export class AddGuestComponent {
   createForm() {
     this.addGuestForm = this.fb.group({
       title: new FormControl(""),
-      name: new FormControl(this.data.name, [Validators.required]),
-      lastname: new FormControl(this.data.lastname, [Validators.required]),
+      name: new FormControl(this.data.customer.name, [Validators.required]),
+      lastname: new FormControl(this.data.customer.lastname, [Validators.required]),
       code: new FormControl("", [Validators.required]),
-      phone: new FormControl(this.data.phone, [Validators.required]),
+      phone: new FormControl(this.data.customer.phone, [Validators.required]),
       email: new FormControl(),
       gender: new FormControl(""),
       birthdate: new FormControl(""),

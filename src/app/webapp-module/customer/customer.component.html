@@ -6,9 +6,9 @@
                     <div class="card-header card-header-danger">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="card-title mt-0">Reservations</h4>
+                                <h4 class="card-title mt-0">Customers</h4>
                                 <!-- <p class="card-category">Date: {{ getDate() | date }}</p> -->
-                                <div class="col-md-4 ml-0 pl-0 coloring">
+                                <!-- div class="col-md-4 ml-0 pl-0 coloring">
                                     <mat-form-field color="warn" class="example-full-width">
                                         <input name="date" matInput [matDatepickerFilter]="dateFilter"
                                             [matDatepicker]="picker" placeholder="Choose a date" [value]="odate.value"
@@ -17,18 +17,18 @@
                                         <mat-datepicker touchUi #picker></mat-datepicker>
                                     </mat-form-field>
 
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-md-6">
                                 <div class="float-right">
-                                    <button mat-raised-button type="submit" (click)="openAddDialog('WALK IN')"
+                                    <!-- <button mat-raised-button type="submit" (click)="openAddGuestDialog('WALK IN')"
                                         class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Add a walk in">
                                         <i class="material-icons">directions_walk</i>
                                         <div class="ripple-container"></div>
-                                    </button>
-                                    <button mat-raised-button type="submit" (click)="openAddDialog('RESERVE')"
+                                    </button> -->
+                                    <button mat-raised-button type="submit" (click)="openGuestDialog('Add')"
                                         class="btn btn-white btn-round btn-just-icon m-1"
-                                        matTooltip="Add a reservation">
+                                        matTooltip="Add a customer">
                                         <i class="material-icons">add</i>
                                         <div class="ripple-container"></div>
                                     </button>
@@ -37,81 +37,68 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class="table-responsive" *ngIf="!ADD">
                             <table class="table table-hover">
                                 <thead class="">
-                                    <th>
-                                        Time
-                                    </th>
                                     <th>
                                         Name
                                     </th>
                                     <th>
-                                        Type
+                                        Lastname
                                     </th>
                                     <th>
-                                        Status
+                                        email
                                     </th>
                                     <th>
                                         Phone
                                     </th>
                                     <th>
-                                        Guests
+                                        Birth Date
+                                    </th>
+                                    <th>
+                                        Company
+                                    </th>
+                                    <th>
+                                        Job Title
                                     </th>
                                     <th>
                                         Notes
                                     </th>
-                                    <th>
-                                        Table
-                                    </th>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let occ of occupy">
+                                    <tr *ngFor="let cust of customers">
                                         <td>
-                                            {{occ.time}}
+                                            {{cust.name}}
                                         </td>
                                         <td>
-                                            <div *ngIf="customers">{{filterCustomer(occ.customer_id).name}}</div>
+                                            {{cust.lastname}}
                                         </td>
                                         <td>
-                                            {{occ.type}}
+                                            {{cust.email}}
                                         </td>
                                         <td>
-                                            <div *ngIf="occ.status"><button mat-raised-button type="submit" (click)="UpdateStatus(occ)"
-                                                class="btn btn-white btn-round btn-just-icon m-1"
-                                                matTooltip="Change Status">
-                                                <i class="material-icons">done</i>
-                                                <div class="ripple-container"></div>
-                                            </button></div>
-                                            <div *ngIf="!occ.status"><button mat-raised-button type="submit" (click)="UpdateStatus(occ)"
-                                                class="btn btn-white btn-round btn-just-icon m-1"
-                                                matTooltip="Change Status">
-                                                <i class="material-icons">clear</i>
-                                                <div class="ripple-container"></div>
-                                            </button></div>
+                                            {{cust.country_code}}/{{cust.phone}}
                                         </td>
                                         <td>
-                                            <div *ngIf="customers">{{filterCustomer(occ.customer_id).phone}}</div>
+                                            {{cust.birth_date}}
                                         </td>
                                         <td>
-                                            <div *ngIf="tables">
-                                                {{occ.guests_number}}/{{filterTable(occ.table_id).max_chairs}}</div>
-                                            <!--  {{occ.guests_number}}/{{occ.table_max_chairs}} -->
+                                            {{cust.company}}
                                         </td>
                                         <td>
-                                            {{occ.notes}}
+                                            {{cust.job_title}}
                                         </td>
                                         <td>
-                                            <div *ngIf="tables"> {{filterTable(occ.table_id).table_name}} </div>
+                                            {{cust.notes}}
                                         </td>
-                                        <td><button mat-raised-button type="submit" (click)="deleteReservation(occ)"
+                                        <td><button mat-raised-button type="submit" (click)="deleteCustomer(cust)"
                                                 class="btn btn-white btn-round btn-just-icon m-1 float-right"
                                                 matTooltip="Delete reservation">
                                                 <i class="material-icons">delete</i>
                                                 <div class="ripple-container"></div>
                                             </button>
                                             <button mat-raised-button type="submit"
-                                                (click)="openUpdateDialog(occ, filterTable(occ.table_id), filterCustomer(occ.customer_id))"
+                                                (click)="openGuestEditDialog(cust, 'Edit')"
                                                 class="btn btn-white btn-round btn-just-icon m-1 float-right"
                                                 matTooltip="Edit reservation">
                                                 <i class="material-icons">edit</i>
@@ -123,6 +110,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <app-add-customer *ngIf="ADD"></app-add-customer>
                     </div>
                 </div>
             </div>

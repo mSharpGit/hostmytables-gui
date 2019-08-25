@@ -12,15 +12,23 @@ import { Section } from '../structures/section';
 export class SectionsService {
 
   private url = environment.apiUrl;
+  private SectionUrl = this.url + '/section';
   private restuarantSectionUrl = this.url + '/section/floor/';
 
   constructor(private router: Router,
     private http: HttpClient,) { }
 
+    getSection(id: number): Observable<Section> {
+      const url = this.SectionUrl+"/"+id;
+      return this.http.get<Section>(url).pipe(
+        tap(section => console.log(`fetched Section`, section))
+      );
+    }
+
   getSections(id: number): Observable<Section[]> {
     const url = this.restuarantSectionUrl+"/"+id;
     return this.http.get<Section[]>(url).pipe(
-      tap(section => console.log(`fetched Sections restuarant`, section))
+      tap(section => console.log(`fetched restuarant's Sections`, section))
     );
   }
 }

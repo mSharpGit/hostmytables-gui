@@ -1,0 +1,79 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-plain">
+                    <div class="card-header card-header-danger">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="card-title mt-0">Floor Plan</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="float-right">
+                                    <!-- <button mat-raised-button type="submit" (click)="openAddGuestDialog('WALK IN')"
+                                        class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Add a walk in">
+                                        <i class="material-icons">directions_walk</i>
+                                        <div class="ripple-container"></div>
+                                    </button> -->
+                                    <button mat-raised-button type="submit" (click)="openGuestDialog('Add')"
+                                        class="btn btn-white btn-round btn-just-icon m-1"
+                                        matTooltip="Add a customer">
+                                        <i class="material-icons">add</i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="col-md-4 ml-0 pl-0 coloring">
+                                    <mat-form-field color="warn" class="example-full-width">
+                                        <input name="date" matInput [matDatepickerFilter]="dateFilter"
+                                            [matDatepicker]="picker" placeholder="Choose a date" [value]="odate.value"
+                                            (dateChange)="addEvent('change', $event)">
+                                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker touchUi #picker></mat-datepicker>
+                                    </mat-form-field>
+
+                                </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="float-right coloring">
+                                    <form #myForm="ngForm" *ngIf="floorSelectForm" [formGroup]="floorSelectForm">
+                                    <mat-form-field class="example-full-width">
+                                        <mat-select  formControlName="floor" placeholder="Floor" name="floor" (selectionChange)="getFloor($event.value)">
+                                            <mat-option>None</mat-option>
+                                            <mat-option *ngFor="let floor of floors" [value]="floor.id">
+                                             {{floor.floor_name}}
+                                            </mat-option>
+                                          </mat-select>
+                                      </mat-form-field>
+                                    </form>
+                                      </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div #floorRoot class="table-responsive" >
+                           <div class="box" [ngStyle]="floorStyle" >
+                                
+                            <div class="example-box" *ngFor="let table of tables" 
+                            [ngStyle]="{'border-radius':table.shape === 'round' ? sizeMap(table.diameter)/2 + 'px': '0px'
+                          ,'width':table.shape === 'round' ? sizeMap(table.diameter) + 'px': sizeMap(table.width)+'px'
+                          ,'height':table.shape === 'round' ? sizeMap(table.diameter) + 'px': sizeMap(table.height)+'px'
+                        ,'position': 'absolute'
+                      ,'top': sizeMap(table.yloc)+'px'
+                      ,'left': sizeMap(table.xloc)+'px'}" 
+                            cdkDragBoundary=".box" cdkDrag  (cdkDragEnded)="onDragEnded($event)">
+                                   <div >{{ table.table_name}}</div> 
+                                  </div>
+
+                           </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

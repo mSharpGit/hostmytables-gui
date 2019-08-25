@@ -60,10 +60,10 @@ export class ReserveComponent implements OnInit {
   }
 
 
-  openAddDialog(): void {
+  openAddDialog(type): void {
     const dialogRef = this.dialog.open(AddReservationComponent, {
       width: '850px',
-      data: { date: this.odate.value, type: 'ADD'}
+      data: { date: this.odate.value, type: type}
     });
 
     const sub = dialogRef.componentInstance.onCloseAddReserve.subscribe((data) => {
@@ -170,6 +170,18 @@ export class ReserveComponent implements OnInit {
     this.occupy = this.occupy.filter(o => o !== occupy);
   }
 
+  UpdateStatus(occupy: Occupy){
+    if(occupy.status){
+      occupy.status = 0;
+    } else {
+      occupy.status = 1;
+    }
+    this.reservationsService.updateReservation(occupy)
+    .subscribe(
+      //occupy => {console.log('status updated')}
+      );
+    
+  }
  
   getDate(){
     var today = new Date();
@@ -178,10 +190,10 @@ export class ReserveComponent implements OnInit {
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
     //this.events.push(`${type}: ${event.value}`);
-    console.log('event3', `${type}: ${event.value}`);
+   // console.log('event3', `${type}: ${event.value}`);
    // ${event.value}.setLocale('en-in');
    
-   console.log('event5',  moment(event.value).format('YYYY-MM-DD'));
+  // console.log('event5',  moment(event.value).format('YYYY-MM-DD'));
    this.odate.setValue(moment(event.value).format('YYYY-MM-DD'));
    this.getReservations(this.restaurant_id,moment(event.value).format('YYYY-MM-DD'));
   }

@@ -1,12 +1,14 @@
 export class Table {
 	id: number;
-	section_id: number;
+	floor_id: number;
 	table_number: number;
 	table_name: string;
 	shape: string;
-	length: number;
+	height: number;
 	width: number;
 	diameter: number;
+	xloc: number;
+	yloc: number;
 	start_date: string;
 	end_date: string;
 	min_chairs: number;
@@ -15,13 +17,15 @@ export class Table {
 
 	constructor() {
 		this.id= 0;
-		this.section_id = 0;
+		this.floor_id = 0;
 		this.table_number = 0;
 		this.table_name = "";
 		this.shape = "";
-		this.length = 0;
+		this.height = 0;
 		this.width = 0;
 		this.diameter = 0;
+		this.xloc = 0;
+		this.yloc = 0;
 		this.start_date  = "";
 		this.end_date  = "";
 		this.min_chairs = 0;

@@ -1,5 +1,5 @@
-<h1 mat-dialog-title>Add A Guest</h1>
-<div mat-dialog-content>
+<h1 mat-dialog-title *ngIf="ADD">Add A Guest</h1>
+<div mat-dialog-content *ngIf="ADD">
   <!-- <p>What's your favorite animal?</p> -->
   <form #myForm="ngForm" [formGroup]="addGuestForm">
 <div class="form-group">
@@ -7,7 +7,7 @@
   <div class="row">
       <div class="col-md-2">
           <mat-form-field class="example-full-width">
-              <mat-select formControlName="title" placeholder="Title" name="title">
+              <mat-select formControlName="title" value="{{data.customer.title}}" placeholder="Title" name="title">
                   <mat-option *ngFor="let title of titles" [value]="title.id">
                     {{title.value}}
                   </mat-option>
@@ -16,7 +16,7 @@
           </div>
       <div class="col-md-5">
         <mat-form-field class="example-full-width">
-            <input matInput  formControlName="name" value="{{data.name}}" autocomplete="off" placeholder="Name">
+            <input matInput  formControlName="name" value="{{data.customer.name}}" autocomplete="off" placeholder="Name">
            </mat-form-field>
          <!--  <div *ngIf="(name.invalid && (name.dirty || name.touched))" class="alert alert-danger h-25 d-inline-block px-3 py-1">
               <div class="" *ngIf="name.errors.required"><small>Select Name</small></div>
@@ -25,7 +25,7 @@
       </div>
       <div class="col-md-5">
           <mat-form-field class="example-full-width">
-            <input matInput formControlName="lastname" value="{{data.lastname}}" autocomplete="off" placeholder="last name">
+            <input matInput formControlName="lastname" value="{{data.customer.lastname}}" autocomplete="off" placeholder="last name">
           </mat-form-field>
       </div>
 
@@ -35,7 +35,7 @@
 
           <div class="col-md-4">
               <mat-form-field class="example-full-width">
-                  <mat-select formControlName="code" value="{{data.code}}" placeholder="Country Code" name="code">
+                  <mat-select formControlName="code" placeholder="Country Code" name="code">
                       <mat-option *ngFor="let code of codes" [value]="code.value">
                         {{code.desc}}
                       </mat-option>
@@ -45,7 +45,7 @@
 
       <div class="col-md-8">
           <mat-form-field class="example-full-width">
-            <input matInput formControlName="phone" minlength="8" value="{{data.phone}}" autocomplete="off" placeholder="Phone">
+            <input matInput formControlName="phone"  minlength="8" value="{{data.customer.phone}}" autocomplete="off" placeholder="Phone">
           </mat-form-field>
           <!-- <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
               <div class="" *ngIf="phone.errors.required"><small>Select Phone</small></div>
@@ -61,7 +61,7 @@
  <div class="row">
  <div class="col-md-5">
     <mat-form-field class="example-full-width">
-      <input matInput formControlName="email"  autocomplete="off" placeholder="Email">
+      <input matInput formControlName="email"  value="{{data.customer.email}}" autocomplete="off" placeholder="Email">
     </mat-form-field>
     <!-- <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
         <div class="" *ngIf="email.errors.required"><small>Select email</small></div>
@@ -77,7 +77,7 @@
 </div>
 <div class="col-md-4"> 
     <mat-form-field class="example-full-width">
-        <input formControlName="birthdate" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker" placeholder="Choose a Birth Date"  [value]="">
+        <input formControlName="birthdate" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker" placeholder="Choose a Birth Date"  value="{{data.customer.birth_date}}">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
     </mat-form-field>
@@ -92,13 +92,13 @@
     
     <div class="col-md-4">
         <mat-form-field class="example-full-width">
-          <input matInput formControlName="jobtitle"  autocomplete="off" placeholder="Add a Job Title">
+          <input matInput formControlName="jobtitle" value="{{data.customer.job_title}}"  autocomplete="off" placeholder="Add a Job Title">
         </mat-form-field>
     </div> 
 
     <div class="col-md-4">
         <mat-form-field class="example-full-width">
-          <input matInput formControlName="company"  autocomplete="off" placeholder="Add a Company">
+          <input matInput formControlName="company" value="{{data.customer.company}}"  autocomplete="off" placeholder="Add a Company">
         </mat-form-field>
     </div> 
 
@@ -125,12 +125,12 @@
     </div>
     <div class="col-md-6">
         <mat-form-field class="example-full-width">
-          <input matInput formControlName="restrictions"  autocomplete="off" placeholder="Add a new food restrictions">
+          <input matInput formControlName="restrictions" #restrictions  autocomplete="off" placeholder="Add a new food restrictions">
         </mat-form-field>
     </div> 
 
     <div class="col-md-1">
-        <button mat-raised-button type="button" (click)="addRestriction()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add a restriction" >
+        <button mat-raised-button type="button" [disabled]="restrictions.value ==''" (click)="addRestriction()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add a restriction" >
             <i class="material-icons">add</i>
             <div class="ripple-container"></div>
         </button>
@@ -150,12 +150,12 @@
     </div>
     <div class="col-md-6">
         <mat-form-field class="example-full-width">
-          <input matInput formControlName="allergy"  autocomplete="off" placeholder="Add a new food allergy">
+          <input matInput formControlName="allergy" #allergy autocomplete="off" placeholder="Add a new food allergy">
         </mat-form-field>
     </div> 
 
     <div class="col-md-1">
-        <button mat-raised-button type="button" (click)="addAllergy()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add an allergy" >
+        <button mat-raised-button type="button" [disabled]="allergy.value === ''" (click)="addAllergy()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add an allergy" >
             <i class="material-icons">add</i>
             <div class="ripple-container"></div>
         </button>
@@ -167,136 +167,201 @@
     
     <div class="col-md-12">
         <mat-form-field class="example-full-width">
-          <input matInput formControlName="notes"  autocomplete="off" placeholder="Add a Note">
+          <input matInput formControlName="notes" value="{{data.customer.notes}}" autocomplete="off" placeholder="Add a Note">
         </mat-form-field>
     </div> 
 
 </div>
-  <!-- <div class="row">
-      <div class="col-md-4">
-          <mat-form-field class="example-full-width">
-            <input matInput formControlName="notes" autocomplete="off" placeholder="notes">
-          </mat-form-field>
-      </div>
-   </div>
-   
-  <div class="row">
-      <div class="col-md-3">
-          <mat-form-field class="example-full-width">
-            <mat-select formControlName="floor" placeholder="Floor"  name="Floor" (selectionChange)="getSections($event.value)">
-                <mat-option>None</mat-option>
-                <mat-option *ngFor="let floor of floors" [value]="floor.id">
-                  {{floor.floor_name}}
-                </mat-option>
-              </mat-select>
-          </mat-form-field>
-          <div *ngIf="floor.invalid && (floor.dirty || floor.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-              <div class="" *ngIf="floor.errors.required"><small>Select Floor</small></div>
-              
-          </div> 
-      </div>
-      <div class="col-md-3">
-          <mat-form-field class="example-full-width" *ngIf="floorSet">
-            <mat-select formControlName="section" placeholder="Section"  name="Section" (selectionChange)="getTables($event.value)">
-                <mat-option>None</mat-option>
-                <mat-option *ngFor="let section of sections" [value]="section.id">
-                  {{section.section_name}}
-                </mat-option>
-              </mat-select>
-          </mat-form-field>
-          <div *ngIf="section.invalid && (section.dirty || section.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-              <div class="" *ngIf="section.errors.required"><small>Select Section</small></div>
-              
-          </div> 
-      </div>
-      <div class="col-md-3">
-          <mat-form-field class="example-full-width" *ngIf="sectionSet" >
-              <mat-select formControlName="table" placeholder="Table" name="Table" (selectionChange)="setGuests($event.value)">
-                  <mat-option>None</mat-option>
-                  <mat-option *ngFor="let table of tables; let i = index" [value]="i">
-                    {{table.table_name}}
-                  </mat-option>
-                </mat-select>
-          </mat-form-field>
-          <div *ngIf="table.invalid && (table.dirty || table.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-              <div class="" *ngIf="table.errors.required"><small>Select Table</small></div>
-              
-          </div> 
-      </div>
-      <div class="col-md-3"> 
-      
-    <mat-form-field class="example-full-width" *ngIf="tableSet">
-      <mat-select formControlName="guestsNumber" placeholder="Number Of Guests" name="guestsNumber">
-          <mat-option>None</mat-option>
-          <mat-option *ngFor="let item of arrayOne(guestsNum); let i = index" [value]="i + 1">
-            {{i + 1}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <div *ngIf="guestsNumber.invalid && (guestsNumber.dirty || guestsNumber.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-          <div class="" *ngIf="guestsNumber.errors.required"><small>Select Number</small></div>
-          
-      </div> 
-      </div>
 
-  </div>
-  <div class="row">
-    
-      <div class="col-md-4">
-        
-        <mat-form-field class="example-full-width">
-            <input formControlName="date" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker" placeholder="Choose a date"  [value]="odate.value"
-            (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker touchUi #picker></mat-datepicker>
-        </mat-form-field>
-        <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-            <div class="" *ngIf="date.errors.required"><small>Select Date</small></div>
-            
-        </div> 
-
-      </div>
-      <div class="col-md-4">
-          <input matInput formControlName="time" autocomplete="off" placeholder="Time" type="text" hidden>
-            <material-timepicker color="primary" label="Hour" [userTime]="exportTime" (change)="onChangeHour($event)" revertLabel="Remove" submitLabel="Ok"></material-timepicker>
-            <div *ngIf="time.invalid && (time.dirty || time.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-                <div class="" *ngIf="time.errors.required"><small>Select Time</small></div>
-                
-            </div> 
-          </div>
-      <div class="col-md-3">
-          <mat-form-field class="example-full-width">
-              <input matInput formControlName="duration" autocomplete="off" placeholder="Duration" type="number">
-            </mat-form-field>
-          </div>
-      
-      
-  </div>
-  <div class="row">
-      <div class="col-md-3">
-          <mat-form-field class="example-full-width">
-              <mat-select formControlName="waiter" placeholder="Waiter" name="waiter">
-                  <mat-option>None</mat-option>
-                  <mat-option *ngFor="let waiter of waiters" [value]="waiter.id">
-                    {{waiter.name}}
-                  </mat-option>
-                </mat-select>
-          </mat-form-field>
-          <div *ngIf="waiter.invalid && (waiter.dirty || waiter.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
-              <div class="" *ngIf="waiter.errors.required"><small>Select Waiter</small></div>
-              
-          </div> 
-      </div>
-      <div class="col-md-3">
-          <mat-form-field class="example-full-width">
-              <input matInput formControlName="minimumSpent" autocomplete="off" placeholder="Minimum Spent">
-            </mat-form-field>
-        </div>
-    
-</div> -->
 <div mat-dialog-actions class="float-right">
   <button mat-button (click)="onNoClick()" class="btn btn-danger pull-right">Cancel</button>
-  <button mat-button (click)="addGuest(addGuestForm.value)" cdkFocusInitial class="btn btn-danger pull-right">Add</button>
+  <button mat-button (click)="addGuest(addGuestForm.value)" cdkFocusInitial class="btn btn-danger pull-right">{{data.type}}</button>
 </div>
 </div>
 </form>
+</div>
+
+
+
+<h1 mat-dialog-title *ngIf="!ADD">Add A Guest</h1>
+<div mat-dialog-content *ngIf="!ADD">
+  <!-- <p>What's your favorite animal?</p> -->
+  <form #myForm="ngForm" [formGroup]="addGuestForm">
+<div class="form-group">
+  <!--First row-->
+  <div class="row">
+      <div class="col-md-2">
+          <mat-form-field class="example-full-width">
+              <mat-select formControlName="title" value="{{data.customer.title}}" placeholder="Title" name="title">
+                  <mat-option *ngFor="let title of titles" [value]="title.id">
+                    {{title.value}}
+                  </mat-option>
+                </mat-select>
+          </mat-form-field>
+          </div>
+      <div class="col-md-5">
+        <mat-form-field class="example-full-width">
+            <input matInput  formControlName="name" value="{{data.customer.name}}" autocomplete="off" placeholder="Name">
+           </mat-form-field>
+         <!--  <div *ngIf="(name.invalid && (name.dirty || name.touched))" class="alert alert-danger h-25 d-inline-block px-3 py-1">
+              <div class="" *ngIf="name.errors.required"><small>Select Name</small></div>
+              
+          </div> -->
+      </div>
+      <div class="col-md-5">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="lastname" value="{{data.customer.lastname}}" autocomplete="off" placeholder="last name">
+          </mat-form-field>
+      </div>
+
+      </div>
+      <!--Second row-->
+      <div class="row">
+
+          <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                  <mat-select formControlName="code" placeholder="Country Code" name="code">
+                      <mat-option *ngFor="let code of codes" [value]="code.value">
+                        {{code.desc}}
+                      </mat-option>
+                    </mat-select>
+              </mat-form-field>
+              </div>
+
+      <div class="col-md-8">
+          <mat-form-field class="example-full-width">
+            <input matInput formControlName="phone"  minlength="8" value="{{data.customer.phone}}" autocomplete="off" placeholder="Phone">
+          </mat-form-field>
+          <!-- <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
+              <div class="" *ngIf="phone.errors.required"><small>Select Phone</small></div>
+              <div *ngIf="phone.errors.minlength"><small> Phone must be at least 8 characters</small></div>
+              
+          </div>  -->
+      </div> 
+      
+     
+</div>
+
+ <!--Second row-->
+ <div class="row">
+ <div class="col-md-5">
+    <mat-form-field class="example-full-width">
+      <input matInput formControlName="email"  value="{{data.customer.email}}" autocomplete="off" placeholder="Email">
+    </mat-form-field>
+    <!-- <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
+        <div class="" *ngIf="email.errors.required"><small>Select email</small></div>
+        
+    </div>  -->
+</div> 
+<div class="col-md-3">
+
+    <mat-radio-group formControlName="sex" aria-label="Select a Gender">
+        <mat-radio-button value="Male">Male</mat-radio-button>
+        <mat-radio-button value="Female">Female</mat-radio-button>
+      </mat-radio-group>
+</div>
+<div class="col-md-4"> 
+    <mat-form-field class="example-full-width">
+        <input formControlName="birthdate" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker" placeholder="Choose a Birth Date"  value="{{data.customer.birth_date}}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+    </mat-form-field>
+    <!-- <div *ngIf="birthdate.invalid && (birthdate.dirty || birthdate.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
+        <div class="" *ngIf="birthdate.errors.required"><small>Select Date</small></div>
+        
+    </div> -->
+  </div>
+</div>
+<!--fifth row-->
+<div class="row">
+    
+    <div class="col-md-4">
+        <mat-form-field class="example-full-width">
+          <input matInput formControlName="jobtitle" value="{{data.customer.job_title}}"  autocomplete="off" placeholder="Add a Job Title">
+        </mat-form-field>
+    </div> 
+
+    <div class="col-md-4">
+        <mat-form-field class="example-full-width">
+          <input matInput formControlName="company" value="{{data.customer.company}}"  autocomplete="off" placeholder="Add a Company">
+        </mat-form-field>
+    </div> 
+
+    <div class="col-md-4">
+
+        <mat-radio-group formControlName="status" aria-label="Select a Gender">
+            <mat-radio-button value="Married">Married</mat-radio-button>
+            <mat-radio-button value="Single">Single</mat-radio-button>
+          </mat-radio-group>
+    </div>
+
+</div>
+<!--fourth row-->
+<div class="row">
+    <div class="col-md-5">
+        <mat-form-field class="example-full-width">
+          <mat-select formControlName="srestriction" placeholder="Food Restriction"  name="srestriction" >
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let restriction of foodRestrictions" [value]="restriction.id">
+                {{restriction.food_type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div class="col-md-6">
+        <mat-form-field class="example-full-width">
+          <input matInput formControlName="restrictions" #restrictions  autocomplete="off" placeholder="Add a new food restrictions">
+        </mat-form-field>
+    </div> 
+
+    <div class="col-md-1">
+        <button mat-raised-button type="button" [disabled]="restrictions.value ==''" (click)="addRestriction()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add a restriction" >
+            <i class="material-icons">add</i>
+            <div class="ripple-container"></div>
+        </button>
+      </div>
+</div>
+<!--fifth row-->
+<div class="row">
+    <div class="col-md-5">
+        <mat-form-field class="example-full-width">
+          <mat-select formControlName="sallergy" placeholder="Food Allergies"  name="sallergy" >
+              <mat-option>None</mat-option>
+              <mat-option *ngFor="let allergy of foodAllergies" [value]="allergy.id">
+                {{allergy.food_type}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div class="col-md-6">
+        <mat-form-field class="example-full-width">
+          <input matInput formControlName="allergy" #allergy autocomplete="off" placeholder="Add a new food allergy">
+        </mat-form-field>
+    </div> 
+
+    <div class="col-md-1">
+        <button mat-raised-button type="button" [disabled]="allergy.value === ''" (click)="addAllergy()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add an allergy" >
+            <i class="material-icons">add</i>
+            <div class="ripple-container"></div>
+        </button>
+      </div>
+</div>
+
+<!--sixth row-->
+<div class="row">
+    
+    <div class="col-md-12">
+        <mat-form-field class="example-full-width">
+          <input matInput formControlName="notes" value="{{data.customer.notes}}" autocomplete="off" placeholder="Add a Note">
+        </mat-form-field>
+    </div> 
+
+</div>
+  
+<div mat-dialog-actions class="float-right">
+  <button mat-button (click)="onNoClick()" class="btn btn-danger pull-right">Cancel</button>
+  <button mat-button (click)="editGuest(addGuestForm.value)" cdkFocusInitial class="btn btn-danger pull-right">{{data.type}}</button>
+</div>
+</div>
+</form>
+</div>

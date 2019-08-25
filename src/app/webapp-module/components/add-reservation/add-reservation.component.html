@@ -16,8 +16,14 @@
       <div class="col-md-4">
         <mat-form-field class="example-full-width">
             <input matInput  formControlName="name" autocomplete="off"  placeholder="Name" (keyup)="search(name.value)" value="">
+            <mat-error *ngIf="name.invalid">
+                <div *ngFor="let error of getErrors(name)">
+                  {{ error }}
+                </div>
+              </mat-error>
+              
            </mat-form-field>
-          <div >
+           <div >
               <div  *ngFor="let customer of customers | async"
                    (click)="selectCustomer(customer)" class="search-result">
                   {{customer.name}}
@@ -31,7 +37,13 @@
       <div class="col-md-4">
           <mat-form-field class="example-full-width">
             <input matInput formControlName="lastname" autocomplete="off" placeholder="last name" value="">
+            <mat-error *ngIf="lastname.invalid">
+                <div *ngFor="let error of getErrors(lastname)">
+                  {{ error }}
+                </div>
+              </mat-error>
           </mat-form-field>
+          
       </div>
      <!--  <div class="col-md-2">
           <mat-form-field class="example-full-width">
@@ -45,6 +57,11 @@
       <div class="col-md-3">
           <mat-form-field class="example-full-width">
             <input matInput formControlName="phone" minlength="8" autocomplete="off" placeholder="Phone">
+            <mat-error *ngIf="phone.invalid">
+                <div *ngFor="let error of getErrors(phone)">
+                  {{ error }}
+                </div>
+              </mat-error>
           </mat-form-field>
           <!-- <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
               <div class="" *ngIf="phone.errors.required"><small>Select Phone</small></div>
@@ -101,7 +118,7 @@
           <mat-form-field class="example-full-width" *ngIf="sectionSet" >
               <mat-select formControlName="table" placeholder="Table" name="Table" (selectionChange)="setGuests($event.value)">
                   <mat-option>None</mat-option>
-                  <mat-option *ngFor="let table of tables; let i = index" [value]="i">
+                  <mat-option *ngFor="let table of tables; let i = index" [value]="table.id">
                     {{table.table_name}}
                   </mat-option>
                 </mat-select>
@@ -137,6 +154,11 @@
             (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker touchUi #picker></mat-datepicker>
+            <mat-error *ngIf="date.invalid">
+                <div *ngFor="let error of getErrors(date)">
+                  {{ error }}
+                </div>
+              </mat-error>
         </mat-form-field>
         <!-- <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
             <div class="" *ngIf="date.errors.required"><small>Select Date</small></div>
@@ -216,6 +238,11 @@
           <div class="col-md-4">
             <mat-form-field class="example-full-width">
                 <input matInput  formControlName="name" autocomplete="off"  placeholder="Name" (keyup)="search(name.value)" value="{{data.customer.name}}">
+                <mat-error *ngIf="name.invalid">
+                    <div *ngFor="let error of getErrors(name)">
+                      {{ error }}
+                    </div>
+                  </mat-error>
                </mat-form-field>
               <div >
                   <div  *ngFor="let customer of customers | async"
@@ -231,6 +258,11 @@
           <div class="col-md-4">
               <mat-form-field class="example-full-width">
                 <input matInput formControlName="lastname" autocomplete="off" placeholder="last name" value="{{data.customer.lastname}}">
+                <mat-error *ngIf="lastname.invalid">
+                    <div *ngFor="let error of getErrors(lastname)">
+                      {{ error }}
+                    </div>
+                  </mat-error>
               </mat-form-field>
           </div>
          <!--  <div class="col-md-2">
@@ -242,9 +274,14 @@
                     </mat-select>
               </mat-form-field>
               </div> -->
-          <div class="col-md-4">
+          <div class="col-md-3">
               <mat-form-field class="example-full-width">
                 <input matInput formControlName="phone" minlength="8" autocomplete="off" placeholder="Phone" value="{{data.customer.phone}}">
+                <mat-error *ngIf="phone.invalid">
+                    <div *ngFor="let error of getErrors(phone)">
+                      {{ error }}
+                    </div>
+                  </mat-error>
               </mat-form-field>
               <!-- <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
                   <div class="" *ngIf="phone.errors.required"><small>Select Phone</small></div>
@@ -252,13 +289,13 @@
                   
               </div>  -->
           </div>
-         <!--  <div class="col-md-1">
+          <div class="col-md-1">
               <button mat-raised-button (click)="openAddGDialog()" class="btn btn-danger btn-round btn-just-icon m-1" matTooltip="Add a guest" >
                   <i class="material-icons">add</i>
                   <div class="ripple-container"></div>
               </button>
              
-          </div> -->
+          </div>
           </div>
        <div class="row">
           <div class="col-md-4">
@@ -269,6 +306,9 @@
        </div>
        
       <div class="row">
+         <!--  <div class="col-md-2">
+            <p *ngIf="filteredTable" >{{filteredTable.name}}</p>
+          </div> -->
           <div class="col-md-3">
               <mat-form-field class="example-full-width">
                 <mat-select formControlName="floor" placeholder="Floor"  name="Floor" (selectionChange)="getSections($event.value)">
@@ -301,7 +341,7 @@
               <mat-form-field class="example-full-width" *ngIf="sectionSet" >
                   <mat-select formControlName="table" placeholder="Table" name="Table" (selectionChange)="setGuests($event.value)">
                       <mat-option>None</mat-option>
-                      <mat-option *ngFor="let table of tables; let i = index" [value]="i">
+                      <mat-option *ngFor="let table of tables; let i = index" [value]="table.id">
                         {{table.table_name}}
                       </mat-option>
                     </mat-select>
@@ -340,7 +380,7 @@
                 <mat-datepicker touchUi #picker></mat-datepicker>
                 <mat-error *ngIf="date.invalid">
                     <div *ngFor="let error of getErrors(date)">
-                      - {{ error }}
+                      {{ error }}
                     </div>
                   </mat-error>
             </mat-form-field>
@@ -352,7 +392,7 @@
           </div>
           <div class="col-md-4">
               <input matInput formControlName="time" autocomplete="off" placeholder="Time" type="text" hidden>
-                <material-timepicker color="primary" label="Hour" [userTime]="exportTime" (change)="onChangeHour($event)" revertLabel="Remove" submitLabel="Ok" value="{{data.occupy.time}}"></material-timepicker>
+                <material-timepicker disabled color="alert-danger" label="time" [userTime]="exportTime" (change)="onChangeHour($event)" revertLabel="Remove" submitLabel="Ok" value="{{data.occupy.time}}"></material-timepicker>
                 <!-- <div *ngIf="time.invalid && (time.dirty || time.touched)" class="alert alert-danger h-25 d-inline-block px-3 py-1">
                     <div class="" *ngIf="time.errors.required"><small>Select Time</small></div>
                     

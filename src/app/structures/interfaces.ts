@@ -14,6 +14,11 @@ export interface DialogData {
 
 }
 
+export interface AddGuestDialogData {
+  customer: Customer;
+  type: string;
+}
+
 export interface AddReserveDialogData {
   occupy: Occupy;
   table: Table;
