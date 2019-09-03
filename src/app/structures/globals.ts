@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { title, code } from './interfaces';
+import { shape, title, code } from './interfaces';
 
 @Injectable()
 export class Globals {
-    
+    shapes: Array<shape> = [{id: 1, value: 'Square'},{id: 2, value: 'Round'}]; 
     titles: Array<title> = [{id: 1, value: 'Mr.'},{id: 2, value: 'Ms.'},{id: 3, value: 'Dr.'},{id: 4, value: 'Prof.'},{id: 5, value: 'Other'}]; 
     codes: Array<code> = [
         {countryCode: 'LB' , value: '+961', desc: 'Lebanon (+961)'},

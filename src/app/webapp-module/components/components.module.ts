@@ -24,6 +24,7 @@ import {
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { AddReservationComponent } from './add-reservation/add-reservation.component';
+import { TableComponent } from './table/table.component';
 
 
   
@@ -54,12 +55,12 @@ import { AddReservationComponent } from './add-reservation/add-reservation.compo
     NavbarComponent,
     SidebarComponent,
     AddGuestComponent,
-    AddReservationComponent  
+    AddReservationComponent,
   ],
   exports: [
     FooterComponent,
     NavbarComponent,
-    SidebarComponent
+    SidebarComponent,
   ]
 })
 export class ComponentsModule { }

@@ -21,12 +21,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="float-right">
-                                    <button mat-raised-button type="submit" (click)="openAddDialog('WALK IN')"
+                                    <button mat-raised-button type="submit" (click)="openAddReserve('WALK IN')"
                                         class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Add a walk in">
                                         <i class="material-icons">directions_walk</i>
                                         <div class="ripple-container"></div>
                                     </button>
-                                    <button mat-raised-button type="submit" (click)="openAddDialog('RESERVE')"
+                                    <button mat-raised-button type="submit" (click)="openAddReserve('RESERVE')"
                                         class="btn btn-white btn-round btn-just-icon m-1"
                                         matTooltip="Add a reservation">
                                         <i class="material-icons">add</i>
@@ -111,7 +111,7 @@
                                                 <div class="ripple-container"></div>
                                             </button>
                                             <button mat-raised-button type="submit"
-                                                (click)="openUpdateDialog(occ, filterTable(occ.table_id), filterCustomer(occ.customer_id))"
+                                                (click)="openUpdateReserve(occ, filterTable(occ.table_id), filterCustomer(occ.customer_id))"
                                                 class="btn btn-white btn-round btn-just-icon m-1 float-right"
                                                 matTooltip="Edit reservation">
                                                 <i class="material-icons">edit</i>

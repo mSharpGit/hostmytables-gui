@@ -17,7 +17,29 @@
     color:rgb(255, 255, 255) !important;
 }
 
+.tinybutton {
+   text-rendering: auto;
+   letter-spacing: normal;
+   word-spacing: normal;
+   text-indent: 0px;
+   text-shadow: none;
+   display: inline-block;
+   text-align: center;
+   align-items: flex-start;
+   cursor: default;
+   box-sizing: border-box;
+   margin: 0em;
+   padding: 0px;
+   border-width: 0px;
+   border-style: solid;
+   background: rgba(255, 255, 255, 0.171);
+   font-size: 15px;
+   width: 20px;
+   height: 20px;
+}
 
+.tinybutton .material-icons{
+   font-size: 15px;}
 
 .example-box {
    /*  width: 200px;

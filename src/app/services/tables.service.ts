@@ -42,4 +42,32 @@ export class TablesService {
       tap(table => console.log(`fetched Tables restuarant`, table))
     );
   }
+
+  addTable(table: Table): Observable<Table> {
+    return this.http.post<Table>(this.TableUrl, table, httpOptions).pipe(
+     tap((table: Table) => {console.log('New table added', table)
+   }));
+ }
+
+ editTableBatch(table: Table[]): Observable<Table[]> {
+  console.log('strigifiy:', JSON.stringify(table), table)
+  return this.http.put<Table[]>(this.TableUrl+'/batch', JSON.stringify(table), httpOptions).pipe(
+    tap((table: Table[]) => {
+      console.log('All Tables updated', table)
+    }));
+}
+
+editTable(table: Table): Observable<Table> {
+  return this.http.put<Table>(this.TableUrl+'/'+ table.id, table, httpOptions).pipe(
+   tap((table: Table) => {console.log('Table updated', table)
+ }));
+}
+
+ deleteTable (table: Table): Observable<Table> {
+  const id = typeof table === 'number' ? table : table.id;
+  const url = `${this.TableUrl}/${id}`;
+  return this.http.delete<Table>(url, httpOptions).pipe(
+    tap(_ => console.log(`deleted table id=${id}`))
+  );
+}
 }

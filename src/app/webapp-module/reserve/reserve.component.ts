@@ -18,6 +18,8 @@ import { Customer } from 'src/app/structures/customer';
 import { CustomerService } from 'src/app/services/customer.service';
 import { FormControl } from '@angular/forms';
 import * as moment from "moment";
+import { DataService } from 'src/app/services/data.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 
@@ -45,8 +47,11 @@ export class ReserveComponent implements OnInit {
   constructor(private reservationsService: ReservationsService,
     private authenticationService: AuthenticationService,
     private tablesService: TablesService,
+    private data: DataService,
     public dialog: MatDialog,
-    private customerService: CustomerService) { }
+    private customerService: CustomerService,
+    private router: Router,
+    private route: ActivatedRoute,) { }
 
   ngOnInit() {
     this.restaurant_id = this.authenticationService.getRestuarantID();
@@ -60,8 +65,8 @@ export class ReserveComponent implements OnInit {
   }
 
 
-  openAddDialog(type): void {
-    const dialogRef = this.dialog.open(AddReservationComponent, {
+  openAddReserve(type): void {
+    /* const dialogRef = this.dialog.open(AddReservationComponent, {
       width: '850px',
       data: { date: this.odate.value, type: type}
     });
@@ -76,7 +81,9 @@ export class ReserveComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.animal = result;
-    });
+    }); */
+    
+    this.router.navigate(['webapp/reserve/', type]);
   }
 
   openUpdateDialog(occupy, table, customer): void {

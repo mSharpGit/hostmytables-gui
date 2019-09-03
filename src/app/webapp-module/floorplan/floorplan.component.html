@@ -9,15 +9,15 @@
                                 <h4 class="card-title mt-0">Floor Plan</h4>
                             </div>
                             <div class="col-md-6">
+                                
                                 <div class="float-right">
-                                    <!-- <button mat-raised-button type="submit" (click)="openAddGuestDialog('WALK IN')"
-                                        class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Add a walk in">
-                                        <i class="material-icons">directions_walk</i>
+                                    <button mat-raised-button type="button" [disabled]="isDisabled" (click)="saveChanges()"
+                                        class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Save Changes">
+                                        <i class="material-icons">save</i>
                                         <div class="ripple-container"></div>
-                                    </button> -->
-                                    <button mat-raised-button type="submit" (click)="openGuestDialog('Add')"
-                                        class="btn btn-white btn-round btn-just-icon m-1"
-                                        matTooltip="Add a customer">
+                                    </button>
+                                    <button mat-raised-button type="button" (click)="openTableForm('Add')" class="btn btn-white btn-round btn-just-icon m-1"
+                                        matTooltip="Add a table">
                                         <i class="material-icons">add</i>
                                         <div class="ripple-container"></div>
                                     </button>
@@ -28,48 +28,64 @@
                             <div class="col-md-6">
                                 <div class="col-md-4 ml-0 pl-0 coloring">
                                     <mat-form-field color="warn" class="example-full-width">
-                                        <input name="date" matInput [matDatepickerFilter]="dateFilter"
-                                            [matDatepicker]="picker" placeholder="Choose a date" [value]="odate.value"
-                                            (dateChange)="addEvent('change', $event)">
+                                        <input name="date" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker"
+                                            placeholder="Choose a date" [value]="odate.value" (dateChange)="addEvent('change', $event)">
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker touchUi #picker></mat-datepicker>
                                     </mat-form-field>
 
-                                </div> 
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="float-right coloring">
                                     <form #myForm="ngForm" *ngIf="floorSelectForm" [formGroup]="floorSelectForm">
-                                    <mat-form-field class="example-full-width">
-                                        <mat-select  formControlName="floor" placeholder="Floor" name="floor" (selectionChange)="getFloor($event.value)">
-                                            <mat-option>None</mat-option>
-                                            <mat-option *ngFor="let floor of floors" [value]="floor.id">
-                                             {{floor.floor_name}}
-                                            </mat-option>
-                                          </mat-select>
-                                      </mat-form-field>
+                                        <mat-form-field class="example-full-width">
+                                            <mat-select formControlName="floor" placeholder="Floor" name="floor"
+                                                (selectionChange)="selectFloor($event.value)">
+                                                <!-- <mat-option>None</mat-option> -->
+                                                <mat-option *ngFor="let floor of floors" [value]="floor.id">
+                                                    {{floor.floor_name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
                                     </form>
-                                      </div>
-                                
+                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div #floorRoot class="table-responsive" >
-                           <div class="box" [ngStyle]="floorStyle" >
+                        <div #floorRoot class="table-responsive">
+                            <div class="box" [ngStyle]="floorStyle">
+                                <!-- <app-table *ngFor="let table of tables" [table] = "table" [left] = "xPositionMap(table.xloc)+'px'"
                                 
-                            <div class="example-box" *ngFor="let table of tables" 
-                            [ngStyle]="{'border-radius':table.shape === 'round' ? sizeMap(table.diameter)/2 + 'px': '0px'
-                          ,'width':table.shape === 'round' ? sizeMap(table.diameter) + 'px': sizeMap(table.width)+'px'
-                          ,'height':table.shape === 'round' ? sizeMap(table.diameter) + 'px': sizeMap(table.height)+'px'
-                        ,'position': 'absolute'
-                      ,'top': sizeMap(table.yloc)+'px'
-                      ,'left': sizeMap(table.xloc)+'px'}" 
-                            cdkDragBoundary=".box" cdkDrag  (cdkDragEnded)="onDragEnded($event)">
-                                   <div >{{ table.table_name}}</div> 
-                                  </div>
+                                  cdkDragBoundary=".box" cdkDrag  (cdkDragEnded)="onDragEnded($event, table)"></app-table> -->
 
-                           </div>
+                                <div class="example-box" *ngFor="let table of tables" [ngStyle]="{'border-radius':table.shape === 'Round' ? sizeMap(table.diameter)/2 + 'px': '0px'
+                          ,'width':table.shape === 'Round' ? sizeMap(table.diameter) + 'px': sizeMap(table.width)+'px'
+                          ,'height':table.shape === 'Round' ? sizeMap(table.diameter) + 'px': sizeMap(table.height)+'px'
+                        ,'position': 'absolute'
+                      ,'top': yPositionMap(table.yloc)+'px'
+                      ,'left': xPositionMap(table.xloc)+'px'}"
+                                    cdkDragBoundary=".box" cdkDrag (cdkDragEnded)="onDragEnded($event, table)"
+                                    (mouseenter)="mouseEnter(table.id)" (mouseleave)="mouseLeave(table.id)">
+                                    <div *ngIf="hover" [ngStyle]="{
+                            'width':'20px'
+                            ,'height':'20px'
+                          ,'position': 'absolute'
+                        ,'top': '0px'
+                        ,'left': table.shape === 'Round' ? sizeMap(table.diameter) + 'px': sizeMap(table.width) +'px'}">
+                                        <button type="button" class="tinybutton" matTooltip="Delete table" (click)="deleteTable(table)">
+                                            <i class="material-icons">close</i></button>
+                                        <button type="button" class="tinybutton" matTooltip="Edit table" (click)="openTableEditForm('Edit', table)" > 
+                                            <i class="material-icons">edit</i></button>
+                                        <button type="button" class="tinybutton" matTooltip="reserve table">
+                                            <i class="material-icons">book</i></button>
+                                    </div>
+                                    <div>{{ table.table_name}}</div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -65,7 +65,7 @@ export class AddCustomerComponent implements OnInit {
       this.type = params['type'];
       // In a real app: dispatch action to load the details here.
     });
-    console.log('type', this.type)
+    //console.log('type', this.type)
     if (this.type === 'Add') {
       this.customer = new Customer;
       this.ADD = true;
@@ -95,10 +95,10 @@ export class AddCustomerComponent implements OnInit {
         this.selectedTitle = this.titles.filter(c => c.value === this.customer.title)
         console.log('selected_title:', this.selectedTitle)
         this.selectedCode = this.codes.filter(c => c.value === this.customer.country_code)
-        this.addGuestForm.controls['title'].setValue(this.selectedTitle[0].id)
-        this.addGuestForm.controls['code'].setValue(this.selectedCode[0].value)
-        this.addGuestForm.controls['sex'].setValue(this.customer.sex)
-        this.addGuestForm.controls['status'].setValue(this.customer.status)
+        this.f['title'].setValue(this.selectedTitle[0].id)
+        this.f['code'].setValue(this.selectedCode[0].value)
+        this.f['sex'].setValue(this.customer.sex)
+        this.f['status'].setValue(this.customer.status)
       }
     }
   }

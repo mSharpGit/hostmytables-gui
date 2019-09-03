@@ -12,7 +12,7 @@ export class FloorsService {
 
   private url = environment.apiUrl;
   private FloorUrl = this.url + '/floor';
-  private restuarantFloorUrl = this.url + '/floor/restaurant/';
+  private restuarantFloorUrl = this.url + '/floor/restaurant';
 
   constructor(private router: Router,
     private http: HttpClient,) { }

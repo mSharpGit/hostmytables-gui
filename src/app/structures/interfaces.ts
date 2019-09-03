@@ -50,6 +50,11 @@ export interface title {
   value: string;
 }
 
+export interface shape {
+  id: number;
+  value: string;
+}
+
 export interface code {
   countryCode: string;
   value: string;

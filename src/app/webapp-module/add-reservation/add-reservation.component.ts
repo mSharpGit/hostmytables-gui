@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, EventEmitter } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker/typings/datepicker-input';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Occupy } from 'src/app/structures/occupy';
-import { AddGuestComponent } from '../add-guest/add-guest.component';
 import { Customer } from 'src/app/structures/customer';
 import { Observable } from 'rxjs/Observable';
 import { Section } from 'src/app/structures/section';
@@ -10,7 +9,6 @@ import { Floor } from 'src/app/structures/floor';
 import { Table } from 'src/app/structures/table';
 import { User } from 'src/app/structures/user';
 import { Subject } from 'rxjs';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ReservationsService } from 'src/app/services/reservations.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { SectionsService } from 'src/app/services/sections.service';
@@ -18,9 +16,12 @@ import { FloorsService } from 'src/app/services/floors.service';
 import { TablesService } from 'src/app/services/tables.service';
 import { UsersService } from 'src/app/services/users.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
-import { title, code, AddReserveDialogData } from 'src/app/structures/interfaces';
+import { title, code } from 'src/app/structures/interfaces';
 import { Globals } from 'src/app/structures/globals';
 import * as moment from "moment";
+import { Router, ActivatedRoute } from '@angular/router';
+import { DataService } from 'src/app/services/data.service';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-add-reservation',
   templateUrl: './add-reservation.component.html',
@@ -61,15 +62,17 @@ export class AddReservationComponent implements OnInit {
   codes: code[];
   onCloseAddReserve = new EventEmitter();
   ADD = false;
-
+  type: string;
+  currentOccupy: Occupy;
+  currentdate: String = '20190505';
   selectedSectionValue: Number;
   selectedfloorValue: Number;
   selectedtableValue: Number;
   selectedwaiterValue: Number;
   private exportTime = { hour: 5, minute: 0, meriden: 'PM', format: 12 };
   pickedTime: string;
+
   constructor(
-    public dialog: MatDialog,
     private fb: FormBuilder,
     private reservationsService: ReservationsService,
     private customerService: CustomerService,
@@ -78,68 +81,78 @@ export class AddReservationComponent implements OnInit {
     private tablesService: TablesService,
     private usersService: UsersService,
     private authenticationService: AuthenticationService,
-    public dialogRef: MatDialogRef<AddReservationComponent>,
     private globals: Globals,
-    @Inject(MAT_DIALOG_DATA) public data: AddReserveDialogData) {
-
-  }
+    private data: DataService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location
+  ) { }
 
   ngOnInit() {
-    if (this.data.type == 'EDIT') {
-       //this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
-       this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
-       this.selectedCustomer = this.data.customer;
-      /*  this.sectionsService.getSection(this.data.table.section_id)
-       .subscribe(section => {this.sectionv = section
-         
-         this.floorsService.getFloor(section.floor_id)
-         .subscribe(floor => {this.floorv = floor;
-           this.sectionSet = true;
-           this.floorSet = true;
-           this.tableSet = true;});
-         
-       }); */
-    } else {
-     
-    this.ADD = true;
-    this.odate = new FormControl(moment(this.data.date).format('YYYY-MM-DD'));
-    }
-    this.createForm();
-    this.titles = this.globals.titles;
-    this.codes = this.globals.codes;
-    this.getFloors(this.authenticationService.getRestuarantID());
-    this.getWaiters(this.authenticationService.getRestuarantID());
-   
-    //console.log(this.odate.value, ':',new Date());
-    this.addReserveForm.controls['date'].setValue(this.odate.value);
+    this.route.params.subscribe(params => {
+      this.type = params['type'];
+      // In a real app: dispatch action to load the details here.
+    });
     
-    this.pickedTime = String(this.exportTime.hour).padStart(2, '0') + ':' + String(this.exportTime.minute).padStart(2, '0')  + ' ' + this.exportTime.meriden;
-    //console.log('time',this.pickedTime)
-    this.addReserveForm.controls['time'].setValue(this.pickedTime)
-    if (this.floorv) {this.f['floor'].setValue(this.floorv.id)}
-    if (this.sectionv) {this.f['section'].setValue(this.sectionv.id)}
+    if (this.type == 'Edit') {
+      this.data.currentOccupy.subscribe(o => {this.currentOccupy = o})
+      //this.odate = new FormControl(moment(this.data.occupy.occupation_date).format('YYYY-MM-DD'));
+      this.odate = new FormControl(moment(this.currentOccupy.occupation_date).format('YYYY-MM-DD'));
+      this.data.currentCustomer.subscribe(c =>this.selectedCustomer = c);
+     /*  this.sectionsService.getSection(this.data.table.section_id)
+      .subscribe(section => {this.sectionv = section
+        
+        this.floorsService.getFloor(section.floor_id)
+        .subscribe(floor => {this.floorv = floor;
+          this.sectionSet = true;
+          this.floorSet = true;
+          this.tableSet = true;});
+        
+      }); */
+   } else {
+    
+   this.ADD = true;
+   this.data.currentdate.subscribe(d => this.currentdate = d);
+   this.odate = new FormControl(moment('20190505').format('YYYY-MM-DD'));
+   }
+   this.createForm();
+   this.titles = this.globals.titles;
+   this.codes = this.globals.codes;
+   this.getFloors(this.authenticationService.getRestuarantID());
+   this.getWaiters(this.authenticationService.getRestuarantID());
+  
+   //console.log(this.odate.value, ':',new Date());
+   this.f['date'].setValue(this.odate.value);
+   
+   this.pickedTime = String(this.exportTime.hour).padStart(2, '0') + ':' + String(this.exportTime.minute).padStart(2, '0')  + ' ' + this.exportTime.meriden;
+   //console.log('time',this.pickedTime)
+   this.f['time'].setValue(this.pickedTime)
+   if (this.floorv) {this.f['floor'].setValue(this.floorv.id)}
+   if (this.sectionv) {this.f['section'].setValue(this.sectionv.id)}
 
-    //this.addReserveForm.controls['time'].setValue(this.pickedTime)
-    // this.addReserveForm.controls['date'].setValue(this.odate.value)
+   //this.addReserveForm.controls['time'].setValue(this.pickedTime)
+   // this.addReserveForm.controls['date'].setValue(this.odate.value)
 
-    //initialize the search text change observable
-    this.customers = this.searchTerms
-      .debounceTime(300)        // wait 300ms after each keystroke before considering the term
-      .distinctUntilChanged()   // ignore if next search term is same as previous
-      .switchMap(term => term   // switch to new observable each time the term changes
-        // return the http search observable
-        ? this.customerService.search(term)
-        // or the observable of empty heroes if there was no search term
-        : Observable.of<Customer[]>([]))
-      .catch(error => {
-        // TODO: add real error handling
-        console.log(error);
-        return Observable.of<Customer[]>([]);
-      });
+   //initialize the search text change observable
+   this.customers = this.searchTerms
+     .debounceTime(300)        // wait 300ms after each keystroke before considering the term
+     .distinctUntilChanged()   // ignore if next search term is same as previous
+     .switchMap(term => term   // switch to new observable each time the term changes
+       // return the http search observable
+       ? this.customerService.search(term)
+       // or the observable of empty heroes if there was no search term
+       : Observable.of<Customer[]>([]))
+     .catch(error => {
+       // TODO: add real error handling
+       console.log(error);
+       return Observable.of<Customer[]>([]);
+     });
   }
-  onNoClick(): void {
+
+
+ /*  onNoClick(): void {
     this.dialogRef.close();
-  }
+  } */
 
   // Push a search term into the observable stream.
   search(term: string): void {
@@ -149,9 +162,9 @@ export class AddReservationComponent implements OnInit {
   selectCustomer(customer: Customer): void {
     this.selectedCustomer = customer;
     this.customers = null;
-    this.addReserveForm.controls['name'].setValue(this.selectedCustomer.name);
-    this.addReserveForm.controls['lastname'].setValue(this.selectedCustomer.lastname);
-    this.addReserveForm.controls['phone'].setValue(this.selectedCustomer.phone);
+    this.f['name'].setValue(this.selectedCustomer.name);
+    this.f['lastname'].setValue(this.selectedCustomer.lastname);
+    this.f['phone'].setValue(this.selectedCustomer.phone);
     //console.log('customer:', this.selectedCustomer)
   }
 
@@ -188,8 +201,13 @@ export class AddReservationComponent implements OnInit {
       .subscribe(waiter => this.waiters = waiter);
   }
 
+  cancel() {
+    this.location.back(); // <-- go back to previous location on cancel
+  }
+
+
   openAddGDialog(): void {
-    var dialogCustomer = new Customer();
+   /*  var dialogCustomer = new Customer();
     dialogCustomer.name = this.addReserveForm.controls.name.value;
     dialogCustomer.lastname = this.addReserveForm.controls.lastname.value;
     dialogCustomer.phone = this.addReserveForm.controls.phone.value;
@@ -214,7 +232,7 @@ export class AddReservationComponent implements OnInit {
 
       console.log('The dialog was closed');
       //this.name = result;
-    });
+    }); */
   }
 
   editReservation(value) {
@@ -240,7 +258,7 @@ export class AddReservationComponent implements OnInit {
     const occupation_date = moment(value.date).format('YYYY-MM-DD')//setValue(value.date).setNumberFormat('MM/dd/yyyy');
     const time = value.time;
     var status = 1
-    if(this.data.type === 'RESERVE'){ status = 0;}
+    if(this.type === 'RESERVE'){ status = 0;}
 
     const guests_number = value.guestsNumber;
     /* var guests_number = 0
@@ -274,7 +292,7 @@ export class AddReservationComponent implements OnInit {
         error => {
           console.log("error", error)
         })
-    this.dialogRef.close();
+    
 
   }
   addReservation(value) {
@@ -296,11 +314,11 @@ export class AddReservationComponent implements OnInit {
     if (this.tables != null) {
        table_id = this.tables[value.table].id;
       } else {table_id = 0} */
-    const type = this.data.type;
+    const type = this.type;
     const occupation_date = moment(value.date).format('YYYY-MM-DD')//setValue(value.date).setNumberFormat('MM/dd/yyyy');
     const time = value.time;
     var status = 1
-    if(this.data.type === 'RESERVE'){ status = 0;}
+    if(this.type === 'RESERVE'){ status = 0;}
     const guests_number = value.guestsNumber;
     /* var guests_number = 0;
     if (value.guestsNumber != null) {
@@ -330,7 +348,6 @@ export class AddReservationComponent implements OnInit {
         error => {
           console.log("error", error)
         })
-    this.dialogRef.close();
   }
 
   getErrors(ctrl) {
@@ -360,11 +377,11 @@ export class AddReservationComponent implements OnInit {
       });
     } else {
       this.addReserveForm = this.fb.group({
-        name: new FormControl(this.data.customer.name, [Validators.required]),
-        lastname: new FormControl(this.data.customer.lastname, [Validators.required]),
+        name: new FormControl(this.selectedCustomer.name, [Validators.required]),
+        lastname: new FormControl(this.selectedCustomer.lastname, [Validators.required]),
         code: new FormControl(""),
-        phone: new FormControl(this.data.customer.phone, [Validators.required]),
-        notes: new FormControl(this.data.occupy.notes),
+        phone: new FormControl(this.selectedCustomer.phone, [Validators.required]),
+        notes: new FormControl(this.currentOccupy.notes),
         floor: new FormControl(),
         section: new FormControl(),
         table: new FormControl(this.data.table.table_name),
@@ -411,5 +428,6 @@ export class AddReservationComponent implements OnInit {
   arrayOne(n: number): any[] {
     return Array(n);
   }
+
 
 }

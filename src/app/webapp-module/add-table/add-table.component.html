@@ -1,0 +1,253 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-plain">
+          <div class="card-header card-header-danger">
+            <div class="row">
+              <div class="col-md-6">
+                <h4 class="card-title mt-0">{{type}} Table</h4>
+              </div>
+              <div class="col-md-6">
+                <!-- <div class="float-right">
+                  <button mat-raised-button type="submit" (click)="openGuestDialog('ADD')"
+                    class="btn btn-white btn-round btn-just-icon m-1" matTooltip="Add a customer">
+                    <i class="material-icons">add</i>
+                    <div class="ripple-container"></div>
+                  </button>
+                </div> -->
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+
+
+            <form #myForm="ngForm" *ngIf="ADD && addTableForm" [formGroup]="addTableForm">
+              <div class="form-group">
+                <!--First row-->
+                <div class="row">
+                  <div class="col-md-2">
+                    <mat-form-field class="example-full-width">
+                      <mat-select formControlName="shape" [(value)]="selected" placeholder="Table Shape" name="shape" (selectionChange)="selectShape($event.value)">
+                        <mat-option *ngFor="let shape of shapes" [value]="shape.value">
+                          {{shape.value}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field class="example-full-width">
+                      <input matInput formControlName="name" value="{{table.table_name}}" autocomplete="off"
+                        placeholder="Name">
+                    </mat-form-field>
+
+                  </div>
+                  <div class="col-md-5">
+                    <mat-form-field class="example-full-width">
+                      <input matInput formControlName="number" value="{{table.table_number}}" autocomplete="off"
+                        placeholder="Number" type="number">
+                    </mat-form-field>
+                  </div>
+
+                </div>
+                <!-- second row-->
+                <div class="row">
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput formControlName="width"  value="{{table.width}}" autocomplete="off" placeholder="Width"
+                            type="number">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput formControlName="height"  value="{{table.height}}" autocomplete="off" placeholder="Height"
+                            type="number">
+                        </mat-form-field>
+                      </div>
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width" >
+                      <input matInput formControlName="diameter"  value="{{table.diameter}}" autocomplete="off"
+                        placeholder="Diameter" type="number">
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput formControlName="xloc" value="{{table.xloc}}" autocomplete="off" placeholder="X position"
+                            type="number">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-3">
+                        <mat-form-field class="example-full-width">
+                          <input matInput formControlName="yloc" value="{{table.yloc}}" autocomplete="off" placeholder="Y position"
+                            type="number">
+                        </mat-form-field>
+                      </div>
+                  <div class="col-md-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput formControlName="maxchairs" value="{{table.max_chairs}}" autocomplete="off"
+                        placeholder="Max Chairs" type="number">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3">
+                    <mat-form-field class="example-full-width">
+                      <input matInput formControlName="minchairs" value="{{table.min_chairs}}" autocomplete="off"
+                        placeholder="Min Chairs" type="number">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width">
+                      <input formControlName="startdate" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker"
+                        placeholder="Choose a date" [value]="startdate.value">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi #picker></mat-datepicker>
+                      <mat-error *ngIf="startdate.invalid">
+                        <div *ngFor="let error of getErrors(date)">
+                          {{ error }}
+                        </div>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <mat-form-field class="example-full-width">
+                      <input formControlName="enddate" matInput [matDatepickerFilter]="dateFilter" [matDatepicker]="picker2"
+                        placeholder="Choose a date" [value]="enddate.value">
+                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi #picker2></mat-datepicker>
+                      <mat-error *ngIf="enddate.invalid">
+                        <div *ngFor="let error of getErrors(date)">
+                          {{ error }}
+                        </div>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div mat-dialog-actions class="float-right">
+                  <button mat-button (click)="cancel()" class="btn btn-danger pull-right">Cancel</button>
+                  <button mat-button (click)="addTable(addTableForm.value)" cdkFocusInitial class="btn btn-danger pull-right">{{type}}</button>
+                </div>
+              </div>
+            </form>
+
+            <form #myForm="ngForm" *ngIf="!ADD && addTableForm" [formGroup]="addTableForm">
+                <div class="form-group">
+                  <!--First row-->
+                  <div class="row">
+                    <div class="col-md-2">
+                      <mat-form-field class="example-full-width">
+                        <mat-select formControlName="shape" [(value)]="selected" placeholder="Table Shape" name="shape" (selectionChange)="selectShape($event.value)">
+                          <mat-option *ngFor="let shape of shapes" [value]="shape.value">
+                            {{shape.value}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="name" value="{{table.table_name}}" autocomplete="off"
+                          placeholder="Name">
+                      </mat-form-field>
+  
+                    </div>
+                    <div class="col-md-5">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="number" value="{{table.table_number}}" autocomplete="off"
+                          placeholder="Number" type="number">
+                      </mat-form-field>
+                    </div>
+  
+                  </div>
+                  <!-- second row-->
+                  <div class="row">
+                      <div class="col-md-3">
+                          <mat-form-field class="example-full-width">
+                            <input matInput formControlName="width"  value="{{table.width}}" autocomplete="off" placeholder="Width"
+                              type="number">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <mat-form-field class="example-full-width">
+                            <input matInput formControlName="height"  value="{{table.height}}" autocomplete="off" placeholder="Height"
+                              type="number">
+                          </mat-form-field>
+                        </div>
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width" >
+                        <input matInput formControlName="diameter"  value="{{table.diameter}}" autocomplete="off"
+                          placeholder="Diameter" type="number">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-3">
+                          <mat-form-field class="example-full-width">
+                            <input matInput formControlName="xloc" value="{{table.xloc}}" autocomplete="off" placeholder="X position"
+                              type="number">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-md-3">
+                          <mat-form-field class="example-full-width">
+                            <input matInput formControlName="yloc" value="{{table.yloc}}" autocomplete="off" placeholder="Y position"
+                              type="number">
+                          </mat-form-field>
+                        </div>
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="maxchairs" value="{{table.max_chairs}}" autocomplete="off"
+                          placeholder="Max Chairs" type="number">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                      <mat-form-field class="example-full-width">
+                        <input matInput formControlName="minchairs" value="{{table.min_chairs}}" autocomplete="off"
+                          placeholder="Min Chairs" type="number">
+                      </mat-form-field>
+                    </div>
+                  </div>
+  
+                  <div class="row">
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input formControlName="startdate" matInput  [matDatepicker]="picker"
+                          placeholder="Choose a date" [value]="sdate.value">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker></mat-datepicker>
+                        <!-- <mat-error *ngIf="startdate.invalid">
+                          <div *ngFor="let error of getErrors(date)">
+                            {{ error }}
+                          </div>
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                        <input formControlName="enddate" matInput [matDatepicker]="picker2"
+                          placeholder="Choose a date" [value]="edate.value">
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker2></mat-datepicker>
+                        <!-- <mat-error *ngIf="enddate.invalid">
+                          <div *ngFor="let error of getErrors(date)">
+                            {{ error }}
+                          </div>
+                        </mat-error> -->
+                      </mat-form-field>
+                    </div>
+                  </div>
+  
+                  <div mat-dialog-actions class="float-right">
+                    <button mat-button (click)="cancel()" class="btn btn-danger pull-right">Cancel</button>
+                    <button mat-button (click)="editTable(addTableForm.value)" cdkFocusInitial class="btn btn-danger pull-right">{{type}}</button>
+                  </div>
+                </div>
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

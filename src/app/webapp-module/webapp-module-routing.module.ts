@@ -5,14 +5,19 @@ import { ReserveComponent } from './reserve/reserve.component';
 import { CustomerComponent } from './customer/customer.component';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { FloorplanComponent } from './floorplan/floorplan.component';
+import { AddTableComponent } from './add-table/add-table.component';
+import { AddReservationComponent } from './add-reservation/add-reservation.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'dashboard',      component: DashboardComponent },
   { path: 'reserve',      component: ReserveComponent },
+  { path: 'reserve/:type',      component: AddReservationComponent },
   { path: 'customer',      component: CustomerComponent },
-  { path: 'floorplan',      component: FloorplanComponent },
   { path: 'customer/:type',      component: AddCustomerComponent },
+  { path: 'floorplan',      component: FloorplanComponent },
+  { path: 'floorplan/table/:type',      component: AddTableComponent },
+  
 ];
 
 @NgModule({
